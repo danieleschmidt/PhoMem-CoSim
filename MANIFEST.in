@@ -1,0 +1,12 @@
+include README.md
+include LICENSE
+include requirements.txt
+include MANIFEST.in
+recursive-include phomem *.py
+recursive-include examples *.py
+recursive-include phomem/data *.yaml *.json
+exclude setup.py
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude .git*
+global-exclude .DS_Store
