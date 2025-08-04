@@ -10,6 +10,11 @@ import chex
 from functools import partial
 
 from .components import MachZehnderInterferometer, PhaseShifter
+from ..utils.exceptions import (
+    PhotonicError, PhaseShifterError, InputValidationError,
+    validate_array_input, validate_range, handle_jax_errors
+)
+from ..utils.logging import get_logger
 
 
 class MachZehnderMesh:
@@ -20,21 +25,46 @@ class MachZehnderMesh:
                  wavelength: float = 1550e-9,
                  loss_db_cm: float = 0.5,
                  phase_shifter: str = 'thermal'):
+        
+        # Input validation
+        validate_range(size, 'size', min_val=2, max_val=128)
+        validate_range(wavelength, 'wavelength', min_val=1.0e-6, max_val=2.0e-6)
+        validate_range(loss_db_cm, 'loss_db_cm', min_val=0.0, max_val=100.0)
+        
+        valid_phase_shifters = ['thermal', 'plasma', 'pcm']
+        if phase_shifter not in valid_phase_shifters:
+            raise InputValidationError(
+                f"Invalid phase shifter type '{phase_shifter}'",
+                parameter_name='phase_shifter',
+                parameter_value=phase_shifter,
+                suggestions=[f"Use one of: {valid_phase_shifters}"]
+            )
+        
         self.size = size
         self.wavelength = wavelength  
         self.loss_db_cm = loss_db_cm
         self.phase_shifter_type = phase_shifter
+        self.logger = get_logger('photonics.mzi_mesh')
         
         # Calculate number of MZIs needed for triangular mesh
         self.n_mzis = size * (size - 1) // 2
         
-        # Initialize MZI components
-        self.mzis = [MachZehnderInterferometer(
-            coupling_ratio=0.5,
-            loss_db=loss_db_cm * 0.1,  # Assume 1mm path length
-            phase_type=phase_shifter
-        ) for _ in range(self.n_mzis)]
+        self.logger.info(f"Initializing {size}x{size} MZI mesh with {self.n_mzis} interferometers")
+        
+        try:
+            # Initialize MZI components
+            self.mzis = [MachZehnderInterferometer(
+                coupling_ratio=0.5,
+                loss_db=loss_db_cm * 0.1,  # Assume 1mm path length
+                phase_type=phase_shifter
+            ) for _ in range(self.n_mzis)]
+        except Exception as e:
+            raise PhotonicError(
+                f"Failed to initialize MZI components: {str(e)}",
+                context={'size': size, 'n_mzis': self.n_mzis}
+            )
     
+    @handle_jax_errors
     def __call__(self, inputs: chex.Array, params: Dict[str, Any]) -> chex.Array:
         """
         Apply triangular MZI mesh transformation.
@@ -46,32 +76,97 @@ class MachZehnderMesh:
         Returns:
             Complex output amplitudes [size,]
         """
-        chex.assert_shape(inputs, (self.size,))
-        
-        phases = params.get('phases', jnp.zeros(self.n_mzis))
-        chex.assert_shape(phases, (self.n_mzis,))
-        
-        # Initialize field vector
-        fields = inputs.astype(jnp.complex64)
-        
-        # Apply MZIs in triangular pattern
-        mzi_idx = 0
-        for layer in range(self.size - 1):
-            for pos in range(self.size - 1 - layer):
-                # Get the two modes to interfere
-                mode_pair = jnp.array([fields[pos], fields[pos + 1]])
+        try:
+            # Input validation
+            validate_array_input(inputs, 'inputs', expected_shape=(self.size,))
+            
+            if not isinstance(params, dict):
+                raise InputValidationError(
+                    "params must be a dictionary",
+                    parameter_name='params',
+                    parameter_value=type(params).__name__,
+                    expected_type=dict
+                )
+            
+            phases = params.get('phases', jnp.zeros(self.n_mzis))
+            validate_array_input(phases, 'phases', expected_shape=(self.n_mzis,))
+            
+            # Validate phase ranges
+            if jnp.any(jnp.abs(phases) > 2 * jnp.pi):
+                self.logger.warning(f"Large phase values detected: max={jnp.max(jnp.abs(phases)):.2f} rad")
                 
-                # Apply MZI with current phase
-                phase_params = {'phase': phases[mzi_idx]}
-                output_pair = self.mzis[mzi_idx](mode_pair, phase_params)
-                
-                # Update field vector
-                fields = fields.at[pos].set(output_pair[0])
-                fields = fields.at[pos + 1].set(output_pair[1])
-                
-                mzi_idx += 1
-        
-        return fields
+            # Check for NaN or infinite values
+            if jnp.any(jnp.isnan(inputs)) or jnp.any(jnp.isinf(inputs)):
+                raise InputValidationError(
+                    "Input contains NaN or infinite values",
+                    parameter_name='inputs',
+                    parameter_value="contains NaN/inf"
+                )
+            
+            if jnp.any(jnp.isnan(phases)) or jnp.any(jnp.isinf(phases)):
+                raise PhaseShifterError(
+                    "Phase parameters contain NaN or infinite values",
+                    context={'phases_stats': {'min': float(jnp.min(phases)), 'max': float(jnp.max(phases))}}
+                )
+            
+            # Initialize field vector
+            fields = inputs.astype(jnp.complex64)
+            
+            # Apply MZIs in triangular pattern
+            mzi_idx = 0
+            for layer in range(self.size - 1):
+                for pos in range(self.size - 1 - layer):
+                    try:
+                        # Get the two modes to interfere
+                        mode_pair = jnp.array([fields[pos], fields[pos + 1]])
+                        
+                        # Apply MZI with current phase
+                        phase_params = {'phase': phases[mzi_idx]}
+                        output_pair = self.mzis[mzi_idx](mode_pair, phase_params)
+                        
+                        # Update field vector
+                        fields = fields.at[pos].set(output_pair[0])
+                        fields = fields.at[pos + 1].set(output_pair[1])
+                        
+                        mzi_idx += 1
+                        
+                    except Exception as e:
+                        raise PhotonicError(
+                            f"Error in MZI {mzi_idx} at layer {layer}, position {pos}: {str(e)}",
+                            context={
+                                'mzi_index': mzi_idx,
+                                'layer': layer,
+                                'position': pos,
+                                'phase_value': float(phases[mzi_idx]) if mzi_idx < len(phases) else None
+                            }
+                        )
+            
+            # Validate output
+            if jnp.any(jnp.isnan(fields)) or jnp.any(jnp.isinf(fields)):
+                raise PhotonicError(
+                    "Output contains NaN or infinite values",
+                    context={
+                        'input_power': float(jnp.sum(jnp.abs(inputs)**2)),
+                        'output_power': float(jnp.sum(jnp.abs(fields)**2)),
+                        'phase_range': [float(jnp.min(phases)), float(jnp.max(phases))]
+                    },
+                    suggestions=[
+                        "Check input power levels",
+                        "Verify phase shifter settings",
+                        "Check for component failures"
+                    ]
+                )
+            
+            return fields
+            
+        except Exception as e:
+            if isinstance(e, (PhotonicError, InputValidationError, PhaseShifterError)):
+                raise
+            else:
+                raise PhotonicError(
+                    f"Unexpected error in MZI mesh: {str(e)}",
+                    context={'mesh_size': self.size, 'n_mzis': self.n_mzis}
+                )
     
     def get_unitary_matrix(self, phases: chex.Array) -> chex.Array:
         """Get the unitary matrix representation."""
