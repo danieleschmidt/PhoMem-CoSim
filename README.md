@@ -391,9 +391,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 ```bibtex
 @software{phomem-cosim2025,
   title={PhoMem-CoSim: Joint Photonic-Memristor Neuromorphic Simulation},
-  author={Your Name and Collaborators},
+  author={Daniel Schmidt},
   year={2025},
-  url={https://github.com/yourusername/phomem-cosim}
+  url={https://github.com/danieleschmidt/phomem-cosim}
 }
 
 @conference{memristors2025,
