@@ -1,22 +1,36 @@
 """
-Security utilities for PhoMem-CoSim.
+Security measures and input sanitization for PhoMem-CoSim.
 """
 
 import os
+import logging
 import hashlib
+import hmac
 import secrets
+import time
+import re
 import tempfile
 from pathlib import Path
-from typing import Dict, Any, List, Optional, Union
+from typing import Dict, Any, List, Optional, Union, Tuple
+import warnings
 import json
 import base64
 
-from .exceptions import PhoMemError, ConfigurationError
-from .logging import get_logger
+import numpy as np
+import jax.numpy as jnp
+
+logger = logging.getLogger(__name__)
 
 
-class SecurityError(PhoMemError):
+class SecurityError(Exception):
     """Security-related errors."""
+    def __init__(self, message: str, context: Optional[Dict] = None):
+        super().__init__(message)
+        self.context = context or {}
+
+
+class SecurityWarning(UserWarning):
+    """Warning for potential security issues."""
     pass
 
 
@@ -24,7 +38,7 @@ class SecurityValidator:
     """Security validation and hardening utilities."""
     
     def __init__(self):
-        self.logger = get_logger('security')
+        self.logger = logger
         self.max_file_size = 100 * 1024 * 1024  # 100MB
         self.allowed_extensions = {'.py', '.json', '.yaml', '.yml', '.txt', '.md', '.cir', '.sp'}
         self.dangerous_patterns = [
@@ -44,12 +58,7 @@ class SecurityValidator:
             if not str(path).startswith(('/tmp', '/var/tmp', str(Path.home()))):
                 raise SecurityError(
                     f"Potentially unsafe file path: {path}",
-                    context={'path': str(path)},
-                    suggestions=[
-                        "Use relative paths within project directory",
-                        "Avoid path traversal patterns (..)",
-                        "Use secure temporary directories"
-                    ]
+                    context={'path': str(path)}
                 )
         
         # Check allowed directories
