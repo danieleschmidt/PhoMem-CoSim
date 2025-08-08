@@ -47,13 +47,34 @@ class NovelOptimizationAlgorithm(ABC):
         pass
 
 
-class QuantumInspiredOptimizer(NovelOptimizationAlgorithm):
-    """Quantum-inspired optimization for photonic-memristive networks."""
+class QuantumCoherentOptimizer(NovelOptimizationAlgorithm):
+    """Quantum-coherent optimization with entanglement and superposition for photonic-memristive networks."""
     
-    def __init__(self, num_qubits: int = 10, num_iterations: int = 100):
+    def __init__(self, num_qubits: int = 12, num_iterations: int = 150, coherence_time: float = 1e-6):
         self.num_qubits = num_qubits
         self.num_iterations = num_iterations
+        self.coherence_time = coherence_time
         self.quantum_state = None
+        self.entanglement_matrix = None
+        self.decoherence_rate = 1.0 / coherence_time
+        
+        # Quantum gate operations
+        self.pauli_x = jnp.array([[0, 1], [1, 0]])
+        self.pauli_y = jnp.array([[0, -1j], [1j, 0]])
+        self.pauli_z = jnp.array([[1, 0], [0, -1]])
+        self.hadamard = jnp.array([[1, 1], [1, -1]]) / jnp.sqrt(2)
+        
+        # Initialize quantum register
+        self._initialize_quantum_register()
+    
+    def _initialize_quantum_register(self):
+        """Initialize quantum register in superposition state."""
+        # Start with equal superposition of all basis states
+        self.quantum_state = jnp.ones(2**min(self.num_qubits, 10)) / jnp.sqrt(2**min(self.num_qubits, 10))
+        
+        # Create entanglement matrix (measure of qubit correlations)
+        n_qubits = min(self.num_qubits, 10)
+        self.entanglement_matrix = jnp.eye(n_qubits) + 0.1 * jnp.ones((n_qubits, n_qubits))
     
     def optimize(
         self,
@@ -212,6 +233,585 @@ class QuantumInspiredOptimizer(NovelOptimizationAlgorithm):
                 mutated[name] = param
         
         return mutated
+    
+    def _quantum_measurement_probability(self, individual: Dict[str, jnp.ndarray]) -> float:
+        """Calculate quantum measurement probability for an individual."""
+        # Calculate overlap with quantum state
+        param_signature = 0.0
+        total_elements = 0
+        
+        for param in individual.values():
+            param_signature += jnp.sum(jnp.abs(param))
+            total_elements += param.size
+        
+        # Normalize to [0,1] probability
+        normalized_signature = param_signature / max(total_elements, 1)
+        measurement_prob = 1.0 / (1.0 + jnp.exp(-normalized_signature))
+        
+        return float(measurement_prob)
+    
+    def _calculate_quantum_fidelity(
+        self, 
+        population: List[Dict[str, jnp.ndarray]], 
+        fitness_values: List[float]
+    ) -> float:
+        """Calculate quantum state fidelity (coherence measure)."""
+        if len(fitness_values) < 2:
+            return 1.0
+        
+        # Measure population diversity (proxy for quantum coherence)
+        diversity_measures = []
+        
+        for i in range(len(population)):
+            for j in range(i + 1, len(population)):
+                distance = 0.0
+                total_elements = 0
+                
+                for name in population[i]:
+                    if name in population[j]:
+                        diff = population[i][name] - population[j][name]
+                        distance += jnp.sum(diff**2)
+                        total_elements += diff.size
+                
+                normalized_distance = jnp.sqrt(distance / max(total_elements, 1))
+                diversity_measures.append(float(normalized_distance))
+        
+        # Higher diversity indicates higher coherence
+        avg_diversity = np.mean(diversity_measures) if diversity_measures else 0.0
+        fidelity = min(1.0, avg_diversity / 10.0)  # Scale to [0,1]
+        
+        return fidelity
+    
+    def _find_entangled_partner(
+        self, 
+        individual_idx: int, 
+        population: List[Dict[str, jnp.ndarray]], 
+        fitness_values: List[float]
+    ) -> Optional[int]:
+        """Find entangled partner based on quantum correlation."""
+        if len(population) <= 1:
+            return None
+        
+        # Calculate quantum correlation based on parameter similarity and fitness
+        correlations = []
+        
+        for i, other_individual in enumerate(population):
+            if i == individual_idx:
+                correlations.append(-1.0)  # Self-correlation excluded
+                continue
+            
+            # Parameter correlation
+            param_correlation = 0.0
+            total_elements = 0
+            
+            for name in population[individual_idx]:
+                if name in other_individual:
+                    param1 = population[individual_idx][name].flatten()
+                    param2 = other_individual[name].flatten()
+                    
+                    # Calculate correlation coefficient
+                    if len(param1) == len(param2) and len(param1) > 0:
+                        correlation = np.corrcoef(param1, param2)[0, 1]
+                        if not np.isnan(correlation):
+                            param_correlation += abs(correlation)
+                            total_elements += 1
+            
+            avg_param_correlation = param_correlation / max(total_elements, 1)
+            
+            # Fitness correlation (inverse - different fitness implies entanglement)
+            fitness_diff = abs(fitness_values[individual_idx] - fitness_values[i])
+            fitness_correlation = 1.0 / (1.0 + fitness_diff)
+            
+            # Combined quantum correlation
+            quantum_correlation = 0.7 * avg_param_correlation + 0.3 * fitness_correlation
+            correlations.append(quantum_correlation)
+        
+        # Select partner with highest correlation
+        max_correlation = max(correlations)
+        if max_correlation > 0.3:  # Threshold for significant entanglement
+            return correlations.index(max_correlation)
+        
+        return None
+    
+    def _create_multidimensional_rotation_matrices(
+        self, 
+        rotation_angle: float, 
+        param_shape: Tuple[int, ...]
+    ) -> List[jnp.ndarray]:
+        """Create multiple 3D rotation matrices for quantum evolution."""
+        num_matrices = max(1, np.prod(param_shape) // 3)
+        matrices = []
+        
+        for i in range(num_matrices):
+            # Random rotation axis
+            axis_angle = i * 2 * np.pi / num_matrices
+            
+            # 3D rotation matrix around z-axis with perturbation
+            theta = rotation_angle + 0.1 * np.sin(axis_angle)
+            phi = 0.1 * np.cos(axis_angle)
+            
+            # Rotation matrix composition
+            rotation_matrix = jnp.array([
+                [jnp.cos(theta) * jnp.cos(phi), -jnp.sin(theta), jnp.cos(theta) * jnp.sin(phi)],
+                [jnp.sin(theta) * jnp.cos(phi), jnp.cos(theta), jnp.sin(theta) * jnp.sin(phi)],
+                [-jnp.sin(phi), 0, jnp.cos(phi)]
+            ])
+            
+            matrices.append(rotation_matrix)
+        
+        return matrices
+    
+    def _quantum_vacuum_fluctuation(self, shape: Tuple[int, ...]) -> jnp.ndarray:
+        """Generate quantum vacuum fluctuations."""
+        # Zero-point energy fluctuations
+        vacuum_energy = 1e-8
+        fluctuations = vacuum_energy * jnp.array(np.random.normal(0, 1, shape))
+        
+        return fluctuations
+    
+    def _quantum_coherent_tunneling(
+        self, 
+        individual: Dict[str, jnp.ndarray]
+    ) -> Dict[str, jnp.ndarray]:
+        """Apply quantum coherent tunneling with phase coherence."""
+        tunneled = {}
+        
+        for name, param in individual.items():
+            # Coherent tunneling amplitude
+            tunneling_amplitude = np.random.exponential(0.3)
+            phase = np.random.uniform(0, 2 * np.pi)
+            
+            # Coherent displacement
+            coherent_displacement = tunneling_amplitude * np.exp(1j * phase)
+            real_displacement = jnp.real(coherent_displacement) * jnp.ones_like(param)
+            
+            # Apply tunneling with coherent phase
+            if np.random.random() < 0.1:  # 10% strong tunneling
+                tunneled[name] = param + 2.0 * real_displacement
+            else:
+                tunneled[name] = param + 0.5 * real_displacement
+        
+        return tunneled
+    
+    def _apply_quantum_error_correction(
+        self, 
+        individual: Dict[str, jnp.ndarray], 
+        best_individual: Dict[str, jnp.ndarray]
+    ) -> Dict[str, jnp.ndarray]:
+        """Apply quantum error correction to maintain coherence."""
+        corrected = {}
+        
+        for name, param in individual.items():
+            if name in best_individual:
+                # Quantum error syndrome detection
+                error_syndrome = param - best_individual[name]
+                error_magnitude = jnp.sqrt(jnp.sum(error_syndrome**2))
+                
+                # Apply correction if error is significant
+                if error_magnitude > 1.0:
+                    # Stabilizer-based correction (simplified)
+                    correction_factor = 0.1
+                    corrected[name] = param - correction_factor * error_syndrome
+                else:
+                    corrected[name] = param
+            else:
+                corrected[name] = param
+        
+        return corrected
+
+
+class PhotonicWaveguideOptimizer(NovelOptimizationAlgorithm):
+    """Advanced optimizer specifically designed for photonic waveguide networks with mode coupling."""
+    
+    def __init__(
+        self, 
+        wavelength: float = 1550e-9, 
+        num_modes: int = 4,
+        num_iterations: int = 120,
+        adaptive_coupling: bool = True
+    ):
+        self.wavelength = wavelength
+        self.num_modes = num_modes
+        self.num_iterations = num_iterations
+        self.adaptive_coupling = adaptive_coupling
+        
+        # Photonic constants
+        self.c = 299792458  # Speed of light
+        self.frequency = self.c / wavelength
+        self.k0 = 2 * np.pi / wavelength
+        
+        # Mode coupling matrix
+        self.coupling_matrix = self._initialize_coupling_matrix()
+        
+    def _initialize_coupling_matrix(self) -> jnp.ndarray:
+        """Initialize inter-modal coupling matrix."""
+        # Create coupling matrix with realistic coupling coefficients
+        coupling = jnp.zeros((self.num_modes, self.num_modes))
+        
+        # Adjacent mode coupling (strongest)
+        for i in range(self.num_modes - 1):
+            coupling = coupling.at[i, i + 1].set(0.1)
+            coupling = coupling.at[i + 1, i].set(0.1)
+        
+        # Non-adjacent coupling (weaker)
+        for i in range(self.num_modes - 2):
+            coupling = coupling.at[i, i + 2].set(0.02)
+            coupling = coupling.at[i + 2, i].set(0.02)
+        
+        return coupling
+    
+    def optimize(
+        self,
+        objective_fn: Callable,
+        initial_params: Dict[str, jnp.ndarray],
+        **kwargs
+    ) -> OptimizationResult:
+        """Photonic waveguide optimization with mode evolution."""
+        logger.info("Starting photonic waveguide optimization")
+        start_time = time.time()
+        
+        # Initialize photonic mode population
+        population_size = 20
+        population = self._initialize_photonic_population(initial_params, population_size)
+        
+        # Waveguide parameters
+        propagation_constant = self.k0 * 2.4  # Effective index approximation
+        mode_amplitudes = jnp.ones(self.num_modes) / jnp.sqrt(self.num_modes)
+        
+        best_individual = None
+        best_fitness = float('inf')
+        convergence_history = []
+        mode_evolution_history = []
+        
+        for iteration in range(self.num_iterations):
+            # Evaluate population with photonic mode analysis
+            fitness_values = []
+            mode_overlaps = []
+            
+            for individual in population:
+                fitness = objective_fn(individual)
+                fitness_values.append(fitness)
+                
+                # Calculate mode overlap for this individual
+                mode_overlap = self._calculate_mode_overlap(individual, mode_amplitudes)
+                mode_overlaps.append(mode_overlap)
+                
+                if fitness < best_fitness:
+                    best_fitness = fitness
+                    best_individual = individual
+            
+            convergence_history.append(best_fitness)
+            mode_evolution_history.append(np.mean(mode_overlaps))
+            
+            # Evolve mode amplitudes based on coupling
+            mode_amplitudes = self._evolve_modal_amplitudes(
+                mode_amplitudes, propagation_constant, fitness_values
+            )
+            
+            # Update population using photonic principles
+            population = self._photonic_mode_update(
+                population, fitness_values, mode_overlaps, mode_amplitudes, iteration
+            )
+            
+            # Adaptive coupling strength
+            if self.adaptive_coupling and iteration > 10:
+                coupling_adaptation = np.exp(-best_fitness / 10.0)
+                self.coupling_matrix *= (0.9 + 0.2 * coupling_adaptation)
+            
+            if iteration % 15 == 0:
+                avg_mode_overlap = np.mean(mode_overlaps)
+                logger.info(f"Photonic iteration {iteration}: fitness={best_fitness:.6f}, mode_overlap={avg_mode_overlap:.4f}")
+        
+        optimization_time = time.time() - start_time
+        
+        result = OptimizationResult(
+            best_params=best_individual,
+            best_loss=best_fitness,
+            convergence_history=convergence_history,
+            optimization_time=optimization_time,
+            iterations=self.num_iterations,
+            success=best_fitness < 1.0,
+            hardware_metrics={'mode_evolution': mode_evolution_history}
+        )
+        
+        logger.info(f"Photonic waveguide optimization completed in {optimization_time:.2f}s")
+        return result
+    
+    def _initialize_photonic_population(
+        self, 
+        initial_params: Dict[str, jnp.ndarray], 
+        population_size: int
+    ) -> List[Dict[str, jnp.ndarray]]:
+        """Initialize population with photonic mode characteristics."""
+        population = []
+        
+        for i in range(population_size):
+            individual = {}
+            
+            for name, param in initial_params.items():
+                # Modal noise based on waveguide dispersion
+                if 'phase' in name.lower():
+                    # Phase parameters get modal dispersion
+                    modal_noise = self._generate_modal_dispersion_noise(param.shape, i)
+                elif 'coupling' in name.lower() or 'weight' in name.lower():
+                    # Coupling parameters get mode-selective noise
+                    modal_noise = self._generate_mode_selective_noise(param.shape, i)
+                else:
+                    # General photonic noise
+                    modal_noise = np.random.normal(0, 0.05, param.shape)
+                
+                individual[name] = param + modal_noise
+            
+            population.append(individual)
+        
+        return population
+    
+    def _generate_modal_dispersion_noise(self, shape: Tuple[int, ...], individual_idx: int) -> jnp.ndarray:
+        """Generate noise based on modal dispersion characteristics."""
+        # Simulate chromatic dispersion effect
+        dispersion_parameter = 17e-6  # ps/(nm·km) typical for SMF
+        frequency_detuning = (individual_idx - 10) * 1e12  # Hz
+        
+        phase_shift = dispersion_parameter * frequency_detuning * self.wavelength**2 / (2 * np.pi * self.c)
+        base_noise = np.random.normal(0, 0.08, shape)
+        
+        # Apply dispersive modulation
+        dispersive_modulation = phase_shift * np.sin(2 * np.pi * individual_idx / 20)
+        noise = base_noise + dispersive_modulation * np.ones(shape)
+        
+        return jnp.array(noise)
+    
+    def _generate_mode_selective_noise(self, shape: Tuple[int, ...], individual_idx: int) -> jnp.ndarray:
+        """Generate noise with mode selectivity."""
+        noise = np.zeros(shape)
+        flat_noise = noise.flatten()
+        
+        # Apply different noise levels for different "modes"
+        for i in range(len(flat_noise)):
+            mode_index = i % self.num_modes
+            mode_coupling = self.coupling_matrix[mode_index, (mode_index + 1) % self.num_modes]
+            
+            # Noise strength depends on mode coupling
+            noise_strength = 0.1 * (1 + 2 * mode_coupling)
+            flat_noise[i] = np.random.normal(0, noise_strength)
+        
+        return jnp.array(flat_noise.reshape(shape))
+    
+    def _calculate_mode_overlap(
+        self, 
+        individual: Dict[str, jnp.ndarray], 
+        mode_amplitudes: jnp.ndarray
+    ) -> float:
+        """Calculate overlap integral with guided modes."""
+        total_overlap = 0.0
+        total_params = 0
+        
+        for name, param in individual.items():
+            param_flat = param.flatten()
+            
+            # Create mode profile for this parameter set
+            mode_profile = jnp.zeros(len(param_flat))
+            
+            for i, val in enumerate(param_flat):
+                mode_idx = i % self.num_modes
+                # Gaussian-like mode profile
+                mode_amplitude = mode_amplitudes[mode_idx]
+                profile_val = mode_amplitude * jnp.exp(-((val - mode_idx * 0.5) ** 2) / 2.0)
+                mode_profile = mode_profile.at[i].set(profile_val)
+            
+            # Calculate overlap integral
+            overlap = jnp.abs(jnp.sum(param_flat * mode_profile))**2
+            total_overlap += float(overlap)
+            total_params += len(param_flat)
+        
+        return total_overlap / max(total_params, 1)
+    
+    def _evolve_modal_amplitudes(
+        self, 
+        mode_amplitudes: jnp.ndarray, 
+        propagation_constant: float, 
+        fitness_values: List[float]
+    ) -> jnp.ndarray:
+        """Evolve mode amplitudes based on coupled-mode theory."""
+        dt = 1e-12  # Time step (ps)
+        z_step = 0.001  # Propagation distance (mm)
+        
+        # Average fitness influences overall mode evolution
+        avg_fitness = np.mean(fitness_values)
+        fitness_factor = jnp.exp(-avg_fitness / 5.0)
+        
+        # Coupled-mode evolution (simplified)
+        # dA/dz = -i*beta*A - i*sum(kappa_ij * A_j)
+        
+        amplitude_derivatives = jnp.zeros_like(mode_amplitudes, dtype=jnp.complex64)
+        
+        for i in range(self.num_modes):
+            # Self-phase modulation term
+            beta_eff = propagation_constant * (1 + 0.01 * fitness_factor)
+            self_term = -1j * beta_eff * mode_amplitudes[i]
+            
+            # Cross-coupling terms
+            coupling_term = 0
+            for j in range(self.num_modes):
+                if i != j:
+                    coupling_coeff = self.coupling_matrix[i, j] * fitness_factor
+                    coupling_term += -1j * coupling_coeff * mode_amplitudes[j]
+            
+            amplitude_derivatives = amplitude_derivatives.at[i].set(self_term + coupling_term)
+        
+        # Update amplitudes
+        new_amplitudes = mode_amplitudes + dt * jnp.real(amplitude_derivatives)
+        
+        # Normalize to conserve power
+        power = jnp.sum(jnp.abs(new_amplitudes)**2)
+        normalized_amplitudes = new_amplitudes / jnp.sqrt(power + 1e-12)
+        
+        return normalized_amplitudes
+    
+    def _photonic_mode_update(
+        self,
+        population: List[Dict[str, jnp.ndarray]],
+        fitness_values: List[float],
+        mode_overlaps: List[float],
+        mode_amplitudes: jnp.ndarray,
+        iteration: int
+    ) -> List[Dict[str, jnp.ndarray]]:
+        """Update population using photonic mode coupling principles."""
+        new_population = []
+        
+        # Sort by fitness for selection
+        fitness_indices = np.argsort(fitness_values)
+        elite_size = len(population) // 4
+        
+        # Elite preservation
+        for i in range(elite_size):
+            elite_idx = fitness_indices[i]
+            new_population.append(population[elite_idx].copy())
+        
+        # Mode-coupling based reproduction
+        for i in range(elite_size, len(population)):
+            # Select parents based on mode overlap and fitness
+            parent1_idx = self._select_parent_by_mode_coupling(
+                fitness_values, mode_overlaps, mode_amplitudes
+            )
+            parent2_idx = self._select_parent_by_mode_coupling(
+                fitness_values, mode_overlaps, mode_amplitudes
+            )
+            
+            # Create offspring through photonic crossover
+            offspring = self._photonic_crossover(
+                population[parent1_idx], population[parent2_idx], mode_amplitudes
+            )
+            
+            # Apply photonic mutation
+            offspring = self._photonic_mutation(offspring, iteration)
+            
+            new_population.append(offspring)
+        
+        return new_population
+    
+    def _select_parent_by_mode_coupling(
+        self, 
+        fitness_values: List[float], 
+        mode_overlaps: List[float],
+        mode_amplitudes: jnp.ndarray
+    ) -> int:
+        """Select parent based on combined fitness and mode coupling strength."""
+        # Combine fitness and mode overlap for selection
+        combined_scores = []
+        
+        for i, (fitness, overlap) in enumerate(zip(fitness_values, mode_overlaps)):
+            # Lower fitness is better, higher overlap is better
+            normalized_fitness = 1.0 / (1.0 + fitness)
+            combined_score = 0.7 * normalized_fitness + 0.3 * overlap
+            combined_scores.append(combined_score)
+        
+        # Probabilistic selection
+        scores_array = np.array(combined_scores)
+        probabilities = scores_array / np.sum(scores_array)
+        
+        return np.random.choice(len(fitness_values), p=probabilities)
+    
+    def _photonic_crossover(
+        self, 
+        parent1: Dict[str, jnp.ndarray],
+        parent2: Dict[str, jnp.ndarray], 
+        mode_amplitudes: jnp.ndarray
+    ) -> Dict[str, jnp.ndarray]:
+        """Photonic crossover using mode interference."""
+        offspring = {}
+        
+        for name in parent1:
+            if name in parent2:
+                # Mode-selective crossover
+                p1_param = parent1[name]
+                p2_param = parent2[name]
+                
+                # Create interference pattern
+                interference_pattern = jnp.zeros_like(p1_param)
+                flat_interference = interference_pattern.flatten()
+                flat_p1 = p1_param.flatten()
+                flat_p2 = p2_param.flatten()
+                
+                for i in range(len(flat_interference)):
+                    mode_idx = i % self.num_modes
+                    mode_weight = jnp.abs(mode_amplitudes[mode_idx])**2
+                    
+                    # Constructive/destructive interference
+                    phase_diff = (flat_p1[i] - flat_p2[i]) * mode_weight
+                    if np.cos(phase_diff) > 0:  # Constructive
+                        flat_interference = flat_interference.at[i].set(
+                            0.6 * flat_p1[i] + 0.4 * flat_p2[i]
+                        )
+                    else:  # Destructive
+                        flat_interference = flat_interference.at[i].set(
+                            0.4 * flat_p1[i] + 0.6 * flat_p2[i]
+                        )
+                
+                offspring[name] = flat_interference.reshape(p1_param.shape)
+            else:
+                offspring[name] = parent1[name]
+        
+        return offspring
+    
+    def _photonic_mutation(
+        self, 
+        individual: Dict[str, jnp.ndarray], 
+        iteration: int
+    ) -> Dict[str, jnp.ndarray]:
+        """Apply photonic mutation based on spontaneous emission and nonlinear effects."""
+        mutated = {}
+        
+        # Mutation rate decreases over time (like spontaneous emission)
+        base_mutation_rate = 0.15 * np.exp(-iteration / 50.0)
+        
+        for name, param in individual.items():
+            mutated_param = param.copy()
+            
+            if np.random.random() < base_mutation_rate:
+                if 'phase' in name.lower():
+                    # Phase mutation with Kerr nonlinearity simulation
+                    kerr_coefficient = 2.6e-20  # m²/W for silicon
+                    intensity = jnp.sum(jnp.abs(param)**2)
+                    nonlinear_phase = kerr_coefficient * intensity * param
+                    
+                    spontaneous_phase = np.random.normal(0, 0.1, param.shape)
+                    mutated_param = param + 0.1 * jnp.real(nonlinear_phase) + spontaneous_phase
+                    
+                else:
+                    # General mutation with photonic noise characteristics
+                    shot_noise = np.random.poisson(lam=10, size=param.shape) - 10
+                    thermal_noise = np.random.normal(0, 0.05, param.shape)
+                    
+                    mutated_param = param + 0.01 * shot_noise + thermal_noise
+            
+            mutated[name] = mutated_param
+        
+        return mutated
+
+
+# Add legacy alias for backward compatibility
+QuantumInspiredOptimizer = QuantumCoherentOptimizer
 
 
 class NeuromorphicPlasticityOptimizer(NovelOptimizationAlgorithm):
@@ -1108,11 +1708,193 @@ def ackley_function(params: Dict[str, jnp.ndarray]) -> float:
                  jnp.exp(jnp.sum(jnp.cos(2 * np.pi * x)) / n) + 20 + np.e)
 
 
+def photonic_memristor_test_function(params: Dict[str, jnp.ndarray]) -> float:
+    """Specialized test function mimicking photonic-memristor network optimization."""
+    total_loss = 0.0
+    
+    for name, param in params.items():
+        param_flat = param.flatten()
+        
+        if 'phase' in name.lower():
+            # Phase shifter constraints (modulo 2π periodicity)
+            phase_wrapped = jnp.mod(param_flat, 2 * np.pi)
+            phase_loss = jnp.sum(jnp.sin(phase_wrapped)**2)  # Minimize phase shifts
+            total_loss += float(phase_loss)
+            
+        elif 'resistance' in name.lower() or 'conductance' in name.lower():
+            # Memristor switching characteristics
+            if 'resistance' in name.lower():
+                resistance = param_flat
+            else:
+                resistance = 1.0 / (param_flat + 1e-12)
+            
+            # Realistic memristor switching curve
+            log_resistance = jnp.log10(resistance + 1e-12)
+            target_log_range = jnp.array([3.0, 6.0])  # 1kΩ to 1MΩ range
+            range_penalty = jnp.sum(jnp.maximum(0, target_log_range[0] - log_resistance)**2 + 
+                                  jnp.maximum(0, log_resistance - target_log_range[1])**2)
+            total_loss += float(range_penalty)
+            
+        elif 'coupling' in name.lower() or 'weight' in name.lower():
+            # Optical coupling efficiency
+            coupling_efficiency = jnp.tanh(jnp.abs(param_flat))
+            coupling_loss = jnp.sum((1 - coupling_efficiency)**2)
+            total_loss += float(coupling_loss * 0.5)
+            
+        else:
+            # General parameter regularization
+            l2_reg = jnp.sum(param_flat**2)
+            total_loss += float(l2_reg * 0.01)
+    
+    # Add multimodal landscape for realistic optimization challenge
+    param_signature = sum(jnp.sum(jnp.abs(p)) for p in params.values())
+    multimodal_term = 0.1 * jnp.sin(param_signature) + 0.05 * jnp.cos(2.3 * param_signature)
+    
+    return total_loss + float(multimodal_term)
+
+
+def hybrid_device_physics_function(params: Dict[str, jnp.ndarray]) -> float:
+    """Test function incorporating realistic hybrid device physics constraints."""
+    total_loss = 0.0
+    
+    # Optical parameters
+    optical_power = 0.0
+    phase_shifter_count = 0
+    
+    # Memristive parameters  
+    memristor_power = 0.0
+    resistance_values = []
+    
+    for name, param in params.items():
+        param_flat = param.flatten()
+        
+        if 'phase' in name.lower():
+            # Thermal phase shifter power consumption
+            phase_shifts = jnp.abs(param_flat)
+            power_per_shifter = 20e-3 * (phase_shifts / np.pi)**2  # 20mW for π shift
+            optical_power += jnp.sum(power_per_shifter)
+            phase_shifter_count += len(param_flat)
+            
+            # Phase noise penalty
+            phase_noise = jnp.sum((param_flat - jnp.round(param_flat / (np.pi/2)) * (np.pi/2))**2)
+            total_loss += float(phase_noise * 0.1)
+            
+        elif 'resistance' in name.lower():
+            resistance_values.extend(param_flat.tolist())
+            
+            # Memristor switching energy
+            voltage = 1.0  # Assume 1V operation
+            current = voltage / (param_flat + 1e-6)
+            switching_energy = voltage * current * 1e-9  # 1ns switching time
+            memristor_power += jnp.sum(switching_energy) * 1e6  # Convert to μW
+            
+            # Resistance drift penalty (aging)
+            log_R = jnp.log10(param_flat + 1e-12)
+            drift_penalty = jnp.sum((log_R - 4.0)**2)  # Target ~10kΩ
+            total_loss += float(drift_penalty * 0.05)
+    
+    # Cross-device interaction penalties
+    if optical_power > 0 and memristor_power > 0:
+        # Thermal crosstalk between optical and electronic domains
+        thermal_crosstalk = optical_power * memristor_power * 1e-6
+        total_loss += float(thermal_crosstalk)
+    
+    # Power budget constraints
+    total_power = optical_power + memristor_power * 1e-6
+    if total_power > 100e-3:  # 100mW budget
+        power_penalty = (total_power - 100e-3)**2 * 1000
+        total_loss += float(power_penalty)
+    
+    # Device variability penalty
+    if len(resistance_values) > 1:
+        resistance_array = jnp.array(resistance_values)
+        resistance_cv = jnp.std(resistance_array) / (jnp.mean(resistance_array) + 1e-12)
+        if resistance_cv > 0.15:  # >15% coefficient of variation
+            variability_penalty = (resistance_cv - 0.15)**2 * 100
+            total_loss += float(variability_penalty)
+    
+    return total_loss
+
+
 def create_test_functions() -> Dict[str, Callable]:
-    """Create dictionary of test functions for research."""
+    """Create comprehensive dictionary of test functions for research."""
     return {
+        # Classical optimization benchmarks
         'rosenbrock': rosenbrock_function,
         'rastrigin': rastrigin_function,
         'sphere': sphere_function,
-        'ackley': ackley_function
+        'ackley': ackley_function,
+        
+        # Photonic-memristor specific benchmarks
+        'photonic_memristor': photonic_memristor_test_function,
+        'hybrid_device_physics': hybrid_device_physics_function
     }
+
+
+def create_research_algorithms() -> Dict[str, NovelOptimizationAlgorithm]:
+    """Create dictionary of research algorithms for comparative studies."""
+    return {
+        'quantum_coherent': QuantumCoherentOptimizer(num_qubits=10, num_iterations=100),
+        'photonic_waveguide': PhotonicWaveguideOptimizer(num_modes=4, num_iterations=80),
+        'neuromorphic_plasticity': NeuromorphicPlasticityOptimizer(num_iterations=120),
+        'bio_inspired_firefly': BioInspiredSwarmOptimizer(algorithm='firefly', num_iterations=60),
+        'bio_inspired_whale': BioInspiredSwarmOptimizer(algorithm='whale', num_iterations=60),
+        'bio_inspired_grey_wolf': BioInspiredSwarmOptimizer(algorithm='grey_wolf', num_iterations=60),
+    }
+
+
+def run_comprehensive_research_study(
+    study_name: str = "Advanced Photonic-Memristor Optimization Study",
+    num_trials: int = 5,
+    save_results: bool = True
+) -> ResearchResult:
+    """Run comprehensive research study comparing all algorithms."""
+    
+    logger.info(f"Starting comprehensive research study: {study_name}")
+    
+    # Initialize research framework
+    framework = ResearchFramework(study_name)
+    
+    # Get algorithms and test functions
+    algorithms = create_research_algorithms()
+    test_functions = create_test_functions()
+    
+    # Conduct comparative study
+    result = framework.conduct_comparative_study(
+        algorithms=algorithms,
+        test_functions=test_functions,
+        num_trials=num_trials
+    )
+    
+    # Generate publication-ready plots
+    if save_results:
+        plot_path = f"{study_name.replace(' ', '_').lower()}_results.png"
+        framework.plot_research_results(result, save_path=plot_path)
+        logger.info(f"Research results plotted and saved to {plot_path}")
+        
+        # Save detailed results
+        results_summary = {
+            'study_name': study_name,
+            'num_algorithms': len(algorithms),
+            'num_test_functions': len(test_functions),
+            'num_trials': num_trials,
+            'conclusions': result.conclusions,
+            'future_work': result.future_work,
+            'best_algorithms': {},
+        }
+        
+        # Identify best algorithms per test function
+        for func_name in test_functions.keys():
+            best_algo = min(algorithms.keys(), key=lambda a: 
+                result.results[a][func_name]['mean_loss'])
+            best_performance = result.results[best_algo][func_name]['mean_loss']
+            results_summary['best_algorithms'][func_name] = {
+                'algorithm': best_algo,
+                'performance': best_performance
+            }
+        
+        logger.info(f"Research study completed. Best performers:")
+        for func, info in results_summary['best_algorithms'].items():
+            logger.info(f"  {func}: {info['algorithm']} (loss: {info['performance']:.6f})")
+    
+    return result

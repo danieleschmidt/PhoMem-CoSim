@@ -1,0 +1,23 @@
+{
+  "app_name": "phomem-cosim",
+  "version": "1.0.0",
+  "environment": "production",
+  "image_name": "phomem-cosim",
+  "image_tag": "v1.0.0",
+  "registry": "registry.hub.docker.com",
+  "cpu_request": "1000m",
+  "cpu_limit": "2000m",
+  "memory_request": "2Gi",
+  "memory_limit": "4Gi",
+  "min_replicas": 3,
+  "max_replicas": 20,
+  "target_cpu_utilization": 70,
+  "target_memory_utilization": 80,
+  "run_as_non_root": true,
+  "read_only_root_filesystem": true,
+  "drop_all_capabilities": true,
+  "enable_metrics": true,
+  "metrics_port": 9090,
+  "health_check_path": "/health",
+  "readiness_check_path": "/ready"
+}

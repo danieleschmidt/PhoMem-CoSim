@@ -1,0 +1,70 @@
+networks:
+  app-network:
+    driver: bridge
+services:
+  grafana:
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: changeme
+    image: grafana/grafana:latest
+    networks:
+    - app-network
+    ports:
+    - 3000:3000
+    volumes:
+    - grafana-data:/var/lib/grafana
+    - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+  phomem-cosim:
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4Gi
+        reservations:
+          cpus: '1'
+          memory: 2Gi
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      update_config:
+        delay: 30s
+        failure_action: rollback
+        parallelism: 1
+    environment:
+      ENVIRONMENT: production
+      LOG_LEVEL: INFO
+      METRICS_ENABLED: 'True'
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 60s
+      test: curl -f http://localhost:8080/health
+      timeout: 10s
+    image: registry.hub.docker.com/phomem-cosim:v1.0.0
+    networks:
+    - app-network
+    ports:
+    - 80:8080
+    - 9090:9090
+    security_opt:
+    - no-new-privileges:true
+    user: 1000:1000
+    volumes:
+    - app-data:/app/data
+    - app-logs:/app/logs
+  prometheus:
+    image: prom/prometheus:latest
+    networks:
+    - app-network
+    ports:
+    - 9090:9090
+    volumes:
+    - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    - prometheus-data:/prometheus
+version: '3.8'
+volumes:
+  app-data: {}
+  app-logs: {}
+  grafana-data: {}
+  prometheus-data: {}

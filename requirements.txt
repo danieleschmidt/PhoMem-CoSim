@@ -1,3 +1,5 @@
+# Production requirements for PhoMem-CoSim - Autonomous SDLC v4.0
+# Core scientific computing
 jax>=0.4.0
 jaxlib>=0.4.0
 numpy>=1.21.0
@@ -6,8 +8,51 @@ matplotlib>=3.5.0
 tqdm>=4.62.0
 PyYAML>=6.0
 h5py>=3.7.0
-pytest>=7.0.0
+
+# JAX ecosystem for high-performance computing
 optax>=0.1.0
 flax>=0.6.0
 chex>=0.1.5
 distrax>=0.1.0
+
+# Testing and quality assurance
+pytest>=7.0.0
+pytest-cov>=4.0.0
+pytest-asyncio>=0.20.0
+bandit>=1.7.0
+
+# Data processing and analysis
+pandas>=1.5.0
+scikit-learn>=1.2.0
+
+# Async and performance
+uvloop>=0.17.0
+httpx>=0.24.0
+
+# Web framework for API endpoints
+fastapi>=0.95.0
+uvicorn>=0.20.0
+
+# Monitoring and observability
+prometheus-client>=0.16.0
+structlog>=22.3.0
+
+# Configuration management
+pydantic>=1.10.0
+python-dotenv>=1.0.0
+
+# Cloud deployment
+kubernetes>=26.1.0
+docker>=6.0.0
+
+# Cloud provider SDKs (optional)
+boto3>=1.26.0  # AWS
+google-cloud-compute>=1.11.0  # GCP  
+azure-mgmt-compute>=29.1.0  # Azure
+
+# Documentation
+sphinx>=6.0.0
+sphinx-rtd-theme>=1.2.0
+
+# System monitoring (optional)
+psutil>=5.9.0

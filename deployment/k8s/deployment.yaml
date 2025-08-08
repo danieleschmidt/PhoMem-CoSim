@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: phomem-cosim
+    environment: production
+    version: 1.0.0
+  name: phomem-cosim
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: phomem-cosim
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/port: '9090'
+        prometheus.io/scrape: 'true'
+      labels:
+        app: phomem-cosim
+        version: 1.0.0
+    spec:
+      containers:
+      - env:
+        - name: ENVIRONMENT
+          value: production
+        - name: LOG_LEVEL
+          value: INFO
+        - name: METRICS_ENABLED
+          value: 'True'
+        image: registry.hub.docker.com/phomem-cosim:v1.0.0
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        name: phomem-cosim
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 9090
+          name: metrics
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 4Gi
+          requests:
+            cpu: 1000m
+            memory: 2Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp-volume
+        - mountPath: /app/data
+          name: data-volume
+      securityContext:
+        fsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+      volumes:
+      - emptyDir: {}
+        name: tmp-volume
+      - emptyDir: {}
+        name: data-volume
