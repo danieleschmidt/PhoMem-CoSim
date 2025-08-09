@@ -1,0 +1,38 @@
+{
+  "timestamp": 1754771067.3840334,
+  "project_root": "/root/repo",
+  "python_version": "3.12.3 (main, Jun 18 2025, 17:59:45) [GCC 13.3.0]",
+  "overall_pass_rate": 0.0,
+  "total_tests": 11,
+  "successful_tests": 0,
+  "results_by_category": {
+    "imports": {
+      "phomem": "FAILED: No module named 'jax'",
+      "config": "FAILED: No module named 'jax'",
+      "data_utils": "FAILED: No module named 'jax'",
+      "plotting": "FAILED: No module named 'jax'",
+      "performance": "FAILED: No module named 'jax'",
+      "security": "FAILED: No module named 'jax'"
+    },
+    "functionality": {
+      "config_validation": "FAILED: No module named 'jax'",
+      "data_io": "FAILED: No module named 'jax'",
+      "memoization": "FAILED: No module named 'jax'"
+    },
+    "security": {
+      "security_general": "FAILED: No module named 'jax'"
+    },
+    "dependencies": {
+      "numpy": "MISSING",
+      "jax": "MISSING",
+      "matplotlib": "MISSING",
+      "pandas": "MISSING",
+      "scipy": "MISSING",
+      "pytest": "MISSING (optional)",
+      "coverage": "MISSING (optional)"
+    },
+    "health": {
+      "health_check": "FAILED: No module named 'jax'"
+    }
+  }
+}

@@ -89,11 +89,7 @@ class SecurityValidator:
             raise SecurityError(
                 f"Potentially dangerous patterns found in {file_type} content",
                 context={'patterns': dangerous_found},
-                suggestions=[
-                    "Review code for security implications",
-                    "Use safe alternatives to dynamic execution",
-                    "Validate all user inputs"
-                ]
+                context={'patterns': dangerous_found}
             )
         
         return True
@@ -192,7 +188,11 @@ class ConfigurationSecurity:
     """Security for configuration files and parameters."""
     
     def __init__(self):
-        self.logger = get_logger('security.config')
+        try:
+            from .logging import get_logger
+            self.logger = get_logger('security.config')
+        except ImportError:
+            self.logger = logger
         self.validator = SecurityValidator()
     
     def validate_config_file(self, config_path: Union[str, Path]) -> Dict[str, Any]:
@@ -215,12 +215,12 @@ class ConfigurationSecurity:
                     import yaml
                     config = yaml.safe_load(content)
                 except ImportError:
-                    raise ConfigurationError(
-                        "YAML support not available",
-                        suggestions=["Install PyYAML: pip install PyYAML"]
+                    raise SecurityError(
+                        "YAML support not available - install PyYAML",
+                        context={'missing_dependency': 'PyYAML'}
                     )
             else:
-                raise ConfigurationError(f"Unsupported configuration format: {path.suffix}")
+                raise SecurityError(f"Unsupported configuration format: {path.suffix}")
             
             # Validate configuration structure
             self.validate_config_structure(config)
@@ -231,9 +231,9 @@ class ConfigurationSecurity:
         except Exception as e:
             if isinstance(e, (SecurityError, ConfigurationError)):
                 raise
-            raise ConfigurationError(
+            raise SecurityError(
                 f"Failed to load configuration: {str(e)}",
-                config_file=str(path)
+                context={'config_file': str(path)}
             )
     
     def validate_config_structure(self, config: Dict[str, Any]) -> bool:
@@ -252,19 +252,17 @@ class ConfigurationSecurity:
             if 'max_iterations' in sim_config:
                 max_iter = sim_config['max_iterations']
                 if not isinstance(max_iter, int) or max_iter < 1 or max_iter > 1000000:
-                    raise ConfigurationError(
-                        f"Invalid max_iterations: {max_iter}",
-                        config_section='simulation',
-                        suggestions=["Use value between 1 and 1,000,000"]
+                    raise SecurityError(
+                        f"Invalid max_iterations: {max_iter} (must be 1-1,000,000)",
+                        context={'config_section': 'simulation', 'value': max_iter}
                     )
             
             if 'convergence_tolerance' in sim_config:
                 tol = sim_config['convergence_tolerance']
                 if not isinstance(tol, (int, float)) or tol <= 0 or tol >= 1:
-                    raise ConfigurationError(
-                        f"Invalid convergence_tolerance: {tol}",
-                        config_section='simulation',
-                        suggestions=["Use positive value less than 1.0"]
+                    raise SecurityError(
+                        f"Invalid convergence_tolerance: {tol} (must be 0 < tol < 1)",
+                        context={'config_section': 'simulation', 'value': tol}
                     )
         
         return True
@@ -306,7 +304,11 @@ class InputSanitizer:
     """Sanitize user inputs and simulation parameters."""
     
     def __init__(self):
-        self.logger = get_logger('security.input')
+        try:
+            from .logging import get_logger
+            self.logger = get_logger('security.input')
+        except ImportError:
+            self.logger = logger
     
     def sanitize_array_input(self, array_data: Any, name: str) -> Any:
         """Sanitize array inputs."""
@@ -332,7 +334,7 @@ class InputSanitizer:
                         if np.any(np.isnan(array_data)) or np.any(np.isinf(array_data)):
                             raise SecurityError(
                                 f"Array {name} contains NaN or infinite values",
-                                suggestions=["Validate input data source"]
+                                context={'array_name': name}
                             )
                 except ImportError:
                     pass  # NumPy not available
