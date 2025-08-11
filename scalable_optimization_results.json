@@ -1,0 +1,61 @@
+{
+  "benchmark_results": {
+    "batch_1": {
+      "mean_latency": 0.0003900051116943359,
+      "std_latency": 0.0002297545424968795,
+      "mean_throughput": 3155.887944803256,
+      "p95_latency": 0.0007393360137939452,
+      "parallel_efficiency": 100
+    },
+    "batch_4": {
+      "mean_latency": 0.00041866302490234375,
+      "std_latency": 8.356222575339684e-06,
+      "mean_throughput": 9558.01505485192,
+      "p95_latency": 0.0004300594329833984,
+      "parallel_efficiency": 24.29779422816243
+    },
+    "batch_16": {
+      "mean_latency": 0.003313922882080078,
+      "std_latency": 0.0006758573310948088,
+      "mean_throughput": 5002.422821156697,
+      "p95_latency": 0.004331111907958984,
+      "parallel_efficiency": 8.95155147516213
+    },
+    "batch_32": {
+      "mean_latency": 0.005614042282104492,
+      "std_latency": 0.0008308211330557479,
+      "mean_throughput": 5823.452477583416,
+      "p95_latency": 0.006776762008666992,
+      "parallel_efficiency": 3.075402907481115
+    },
+    "batch_64": {
+      "mean_latency": 0.008709287643432618,
+      "std_latency": 0.0010045513891940327,
+      "mean_throughput": 7438.651222511851,
+      "p95_latency": 0.010191202163696289,
+      "parallel_efficiency": 1.4259111023261228
+    }
+  },
+  "training_results": {
+    "training_time": 0.32465219497680664,
+    "samples_per_second": 6160.438866408654,
+    "final_loss": 3.80988738331114e-09,
+    "optimization_stats": {
+      "cache_hits": 20,
+      "vectorization_uses": 114,
+      "parallel_executions": 125,
+      "total_operations": 270
+    }
+  },
+  "system_stats": {
+    "total_inferences": 2585,
+    "total_training_steps": 110,
+    "network_size": "16x(16, 8)",
+    "optimization_level": "aggressive"
+  },
+  "configuration": {
+    "max_workers": 2,
+    "cache_size_mb": 128,
+    "batch_size": 16
+  }
+}

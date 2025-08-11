@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: phomem-cosim
+    tier: production
+    version: v4.0.0
+  name: phomem-cosim
+  namespace: phomem-production
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: phomem-cosim
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: phomem-cosim
+        version: v4.0.0
+    spec:
+      containers:
+      - env:
+        - name: ENVIRONMENT
+          value: production
+        - name: LOG_LEVEL
+          value: INFO
+        - name: OPTIMIZATION_LEVEL
+          value: aggressive
+        - name: CACHE_SIZE_MB
+          value: '256'
+        - name: MAX_WORKERS
+          value: '4'
+        image: phomem/cosim:v4.0.0-production
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        name: phomem-cosim
+        ports:
+        - containerPort: 8000
+          name: http
+        - containerPort: 9090
+          name: metrics
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+          requests:
+            cpu: 200m
+            memory: 512Mi
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000

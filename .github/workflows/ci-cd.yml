@@ -1,0 +1,48 @@
+jobs:
+  build-and-deploy:
+    if: github.ref == 'refs/heads/main'
+    needs:
+    - test
+    - security
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build Docker image
+      run: docker build -t phomem/cosim:${{ github.sha }} .
+    - name: Deploy to production
+      run: kubectl apply -f deployment/
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Security scan
+      run: bandit -r phomem/
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+    - name: Run tests
+      run: python -m pytest --cov=phomem --cov-report=xml
+    - name: Run quality gates
+      run: python quality_gates.py
+    strategy:
+      matrix:
+        python-version:
+        - '3.9'
+        - '3.10'
+        - '3.11'
+name: PhoMem-CoSim CI/CD
+'on':
+  pull_request:
+    branches:
+    - main
+  push:
+    branches:
+    - main
+    - develop
