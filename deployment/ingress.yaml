@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rate-limit: '100'
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+  name: phomem-cosim-ingress
+  namespace: phomem-production
+spec:
+  rules:
+  - host: api.phomem-cosim.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: phomem-cosim-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - api.phomem-cosim.com
+    secretName: phomem-tls-secret

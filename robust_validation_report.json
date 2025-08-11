@@ -1,0 +1,34 @@
+{
+  "network_config": {
+    "photonic_size": 8,
+    "memristive_shape": [
+      8,
+      4
+    ],
+    "wavelength": 1.55e-06,
+    "responsivity": 0.8,
+    "created_at": 1754882428.7179875,
+    "version": "2.0.0-robust"
+  },
+  "validation_stats": {
+    "total_validations": 54,
+    "validation_errors": 0,
+    "success_rate": 1.0
+  },
+  "security_summary": {
+    "session_id": "5c8d998f90658d56",
+    "total_access_attempts": 4,
+    "blocked_operations": 0
+  },
+  "health_summary": {
+    "current_status": "healthy",
+    "uptime_seconds": 0.018581151962280273,
+    "total_errors": 0
+  },
+  "device_status": {
+    "photonic_phases_valid": true,
+    "conductances_in_range": true,
+    "total_devices": 96
+  },
+  "timestamp": 1754882428.7366073
+}
