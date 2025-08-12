@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 
 from .utils.validation import ValidationError, validate_input_array
 from .utils.logging import setup_logging
-from .utils.performance import ProfileManager, MemoryMonitor
+from .utils.performance import PerformanceOptimizer, MemoryManager
 
 logger = logging.getLogger(__name__)
 

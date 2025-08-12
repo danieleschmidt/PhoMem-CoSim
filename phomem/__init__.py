@@ -10,7 +10,7 @@ __version__ = "0.1.0"
 # Core neural network components
 from .neural import HybridNetwork
 from .neural.networks import PhotonicLayer, MemristiveLayer
-from .neural.training import HardwareAwareTrainer
+# from .neural.training import HardwareAwareTrainer  # TODO: Implement HardwareAwareTrainer
 
 # Photonic components
 from .photonics import MachZehnderMesh, PhotoDetectorArray, ThermalPhaseShifter
@@ -22,7 +22,7 @@ from .memristors.models import PCMModel, RRAMModel
 
 # Simulation engines
 from .simulator import MultiPhysicsSimulator, train, create_hardware_optimizer
-from .simulator.core import SimulationEngine
+# from .simulator.core import SimulationEngine  # TODO: Check class name
 
 # Configuration and management
 from .config import PhoMemConfig, ConfigManager
@@ -36,8 +36,8 @@ from .benchmarking import PerformanceBenchmark, run_comprehensive_benchmark
 
 # Utilities
 from .utils.validation import get_validator, ValidationError
-from .utils.security import get_security_manager, SecurityError
-from .utils.performance import ProfileManager, MemoryMonitor
+from .utils.security import get_security_validator, SecurityError
+from .utils.performance import PerformanceOptimizer, MemoryManager
 from .utils.logging import setup_logging, get_logger
 
 __all__ = [
@@ -45,7 +45,7 @@ __all__ = [
     "HybridNetwork",
     "PhotonicLayer", 
     "MemristiveLayer",
-    "HardwareAwareTrainer",
+    # "HardwareAwareTrainer",  # TODO: Implement
     
     # Photonic devices
     "MachZehnderMesh", 
@@ -63,7 +63,7 @@ __all__ = [
     
     # Simulation
     "MultiPhysicsSimulator",
-    "SimulationEngine",
+    # "SimulationEngine",  # TODO: Check class name
     "train",
     "create_hardware_optimizer",
     
@@ -94,10 +94,10 @@ __all__ = [
     # Utilities
     "get_validator",
     "ValidationError",
-    "get_security_manager", 
+    "get_security_validator", 
     "SecurityError",
-    "ProfileManager",
-    "MemoryMonitor",
+    "PerformanceOptimizer",
+    "MemoryManager",
     "setup_logging",
     "get_logger"
 ]

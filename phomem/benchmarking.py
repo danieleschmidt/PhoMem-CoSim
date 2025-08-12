@@ -16,9 +16,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 from .neural.networks import HybridNetwork
-from .neural.training import HardwareAwareTrainer
-from .simulator.multiphysics import MultiPhysicsSimulator
-from .utils.performance import ProfileManager, MemoryMonitor
+# from .neural.training import HardwareAwareTrainer  # TODO: Implement HardwareAwareTrainer
+from .simulator.core import MultiPhysicsSimulator
+from .utils.performance import PerformanceOptimizer, MemoryManager
 from .utils.logging import setup_logging
 
 logger = logging.getLogger(__name__)

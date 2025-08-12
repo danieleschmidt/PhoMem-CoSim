@@ -289,3 +289,17 @@ def log_warning(message: str, context: Dict[str, Any] = None):
 def create_simulation_logger(simulation_id: str) -> SimulationLogger:
     """Create a simulation-specific logger."""
     return SimulationLogger(simulation_id)
+
+def setup_logging(level=logging.INFO):
+    """Setup basic logging configuration."""
+    logging.basicConfig(
+        level=level,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.StreamHandler(sys.stdout)
+        ]
+    )
+    # Initialize the global logger instance
+    global _logger_instance
+    if _logger_instance is None:
+        _logger_instance = PhoMemLogger()
