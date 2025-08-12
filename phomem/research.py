@@ -15,7 +15,7 @@ import scipy.stats as stats
 from scipy.optimize import minimize
 
 from .optimization import OptimizationResult, HardwareAwareObjective
-from .utils.performance import ProfileManager
+from .utils.performance import PerformanceOptimizer
 
 logger = logging.getLogger(__name__)
 

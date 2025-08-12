@@ -19,6 +19,7 @@ from .architectures import (
 from .training import (
     hardware_aware_loss,
     create_hardware_optimizer,
+    train,
     train_stdp
 )
 
@@ -33,5 +34,6 @@ __all__ = [
     "MemristiveSTDPSynapses",
     "hardware_aware_loss",
     "create_hardware_optimizer",
+    "train",
     "train_stdp"
 ]

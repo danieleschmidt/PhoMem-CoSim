@@ -88,7 +88,6 @@ class SecurityValidator:
         if dangerous_found:
             raise SecurityError(
                 f"Potentially dangerous patterns found in {file_type} content",
-                context={'patterns': dangerous_found},
                 context={'patterns': dangerous_found}
             )
         

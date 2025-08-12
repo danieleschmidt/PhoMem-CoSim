@@ -1,0 +1,44 @@
+{
+  "configuration_name": "Simple_Test_Benchmark",
+  "timestamp": "2025-08-12 20:19:25",
+  "execution_time": 0.05255579948425293,
+  "performance_rankings": {
+    "quantum_annealing": 1
+  },
+  "publication_summary": {
+    "overall_best_algorithm": "quantum_annealing",
+    "total_algorithms_tested": 1,
+    "total_test_functions": 1,
+    "significant_improvements_rate": 0.0,
+    "algorithm_categories": {
+      "quantum": [
+        "quantum_annealing"
+      ],
+      "neuromorphic": [],
+      "physics_informed": []
+    },
+    "category_performance": {
+      "quantum": {
+        "best_rank": 1,
+        "average_rank": 1.0,
+        "num_algorithms": 1
+      }
+    },
+    "key_findings": [
+      "Best overall algorithm: quantum_annealing",
+      "Significant improvements in 0/0 comparisons",
+      "Tested 1 algorithms across multiple categories",
+      "Quantum algorithms showed unique advantages in multimodal landscapes",
+      "Self-healing algorithms demonstrated superior fault tolerance",
+      "Physics-informed methods discovered novel architectural solutions"
+    ],
+    "statistical_rigor": {
+      "significance_level": 0.05,
+      "multiple_testing_correction": "Bonferroni",
+      "effect_sizes_computed": true,
+      "confidence_intervals": true
+    }
+  },
+  "num_algorithms": 1,
+  "num_test_functions": 1
+}

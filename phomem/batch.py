@@ -19,10 +19,10 @@ from tqdm import tqdm
 
 from .config import PhoMemConfig
 from .neural.networks import HybridNetwork
-from .neural.training import HardwareAwareTrainer
-from .simulator.multiphysics import MultiPhysicsSimulator
+# from .neural.training import HardwareAwareTrainer  # TODO: Implement HardwareAwareTrainer
+from .simulator.core import MultiPhysicsSimulator
 from .utils.logging import setup_logging
-from .utils.performance import ProfileManager, MemoryMonitor
+from .utils.performance import PerformanceOptimizer, MemoryManager
 
 logger = logging.getLogger(__name__)
 
