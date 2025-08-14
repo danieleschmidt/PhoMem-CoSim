@@ -20,6 +20,14 @@ class PCMDevice:
                  geometry: str = 'mushroom',
                  dimensions: Dict[str, float] = None,
                  temperature: float = 300.0):
+        # Input validation
+        if temperature <= 0:
+            raise ValueError(f"Temperature must be positive, got {temperature}")
+        if material not in ['GST225', 'GST124', 'Sb2Te3']:
+            raise ValueError(f"Unsupported material: {material}")
+        if geometry not in ['mushroom', 'bridge', 'via']:
+            raise ValueError(f"Unsupported geometry: {geometry}")
+            
         self.material = material
         self.geometry = geometry
         self.temperature = temperature
@@ -108,6 +116,18 @@ class RRAMDevice:
                  area: float = 100e-9**2,
                  forming_voltage: float = 2.5,
                  temperature: float = 300.0):
+        # Input validation
+        if thickness <= 0:
+            raise ValueError(f"Thickness must be positive, got {thickness}")
+        if area <= 0:
+            raise ValueError(f"Area must be positive, got {area}")
+        if forming_voltage <= 0:
+            raise ValueError(f"Forming voltage must be positive, got {forming_voltage}")
+        if temperature <= 0:
+            raise ValueError(f"Temperature must be positive, got {temperature}")
+        if oxide not in ['HfO2', 'TiO2', 'Ta2O5', 'Al2O3']:
+            raise ValueError(f"Unsupported oxide: {oxide}")
+            
         self.oxide = oxide
         self.thickness = thickness
         self.area = area
@@ -188,6 +208,16 @@ class PCMCrossbar:
                  device_model: str = 'pcm_mushroom',
                  temperature: float = 300.0,
                  variability: bool = True):
+        # Input validation
+        if rows <= 0:
+            raise ValueError(f"Rows must be positive, got {rows}")
+        if cols <= 0:
+            raise ValueError(f"Cols must be positive, got {cols}")
+        if temperature <= 0:
+            raise ValueError(f"Temperature must be positive, got {temperature}")
+        if device_model not in ['pcm_mushroom', 'pcm_bridge', 'pcm_via']:
+            raise ValueError(f"Unsupported device model: {device_model}")
+            
         self.rows = rows
         self.cols = cols
         self.device_model = device_model

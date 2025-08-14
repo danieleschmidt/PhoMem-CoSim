@@ -1,0 +1,53 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "PhoMem-CoSim Production Dashboard",
+    "tags": [
+      "phomem",
+      "production"
+    ],
+    "timezone": "UTC",
+    "panels": [
+      {
+        "title": "Simulation Latency",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(phomem_simulation_duration_seconds_bucket[5m]))",
+            "legendFormat": "95th percentile"
+          }
+        ]
+      },
+      {
+        "title": "Throughput",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(phomem_simulations_total[5m])",
+            "legendFormat": "Simulations/sec"
+          }
+        ]
+      },
+      {
+        "title": "Error Rate",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(phomem_errors_total[5m]) / rate(phomem_requests_total[5m])",
+            "legendFormat": "Error Rate"
+          }
+        ]
+      },
+      {
+        "title": "GPU Utilization",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "avg(gpu_utilization_percent)",
+            "legendFormat": "GPU Utilization %"
+          }
+        ]
+      }
+    ]
+  }
+}

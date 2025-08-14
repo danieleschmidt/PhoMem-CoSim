@@ -23,6 +23,18 @@ class PhotonicLayer(nn.Module):
     phase_shifter_type: str = 'thermal'
     include_nonlinearity: bool = False
     
+    def __post_init__(self):
+        super().__post_init__()
+        # Input validation
+        if self.size <= 0:
+            raise ValueError(f"Size must be positive, got {self.size}")
+        if self.wavelength <= 0:
+            raise ValueError(f"Wavelength must be positive, got {self.wavelength}")
+        if self.loss_db_cm < 0:
+            raise ValueError(f"Loss must be non-negative, got {self.loss_db_cm}")
+        if self.phase_shifter_type not in ['thermal', 'plasma', 'pcm']:
+            raise ValueError(f"Invalid phase shifter type: {self.phase_shifter_type}")
+    
     def setup(self):
         self.mzi_mesh = MachZehnderMesh(
             size=self.size,
@@ -111,6 +123,16 @@ class MemristiveLayer(nn.Module):
     device_type: str = 'PCM'  # 'PCM' or 'RRAM'
     include_aging: bool = False
     variability: bool = True
+    
+    def __post_init__(self):
+        super().__post_init__()
+        # Input validation
+        if self.input_size <= 0:
+            raise ValueError(f"Input size must be positive, got {self.input_size}")
+        if self.output_size <= 0:
+            raise ValueError(f"Output size must be positive, got {self.output_size}")
+        if self.device_type not in ['PCM', 'RRAM']:
+            raise ValueError(f"Invalid device type: {self.device_type}")
     
     def setup(self):
         if self.device_type == 'PCM':
