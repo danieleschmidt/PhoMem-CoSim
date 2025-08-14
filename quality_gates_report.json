@@ -1,38 +1,151 @@
 {
-  "timestamp": 1754771067.3840334,
-  "project_root": "/root/repo",
-  "python_version": "3.12.3 (main, Jun 18 2025, 17:59:45) [GCC 13.3.0]",
-  "overall_pass_rate": 0.0,
-  "total_tests": 11,
-  "successful_tests": 0,
-  "results_by_category": {
-    "imports": {
-      "phomem": "FAILED: No module named 'jax'",
-      "config": "FAILED: No module named 'jax'",
-      "data_utils": "FAILED: No module named 'jax'",
-      "plotting": "FAILED: No module named 'jax'",
-      "performance": "FAILED: No module named 'jax'",
-      "security": "FAILED: No module named 'jax'"
+  "timestamp": 1755130471.4926436,
+  "summary": {
+    "passed_gates": 5,
+    "total_gates": 6,
+    "pass_rate": 0.8333333333333334,
+    "total_execution_time": 6.1412599086761475
+  },
+  "gates": [
+    {
+      "name": "Generation 1 Functionality",
+      "passed": true,
+      "execution_time": 3.623302698135376,
+      "metrics": {
+        "components_created": 3,
+        "layers_tested": 2,
+        "forward_passes": 2,
+        "optical_power_conservation": 0.9586628079414368,
+        "current_amplification": 2.399030923843384
+      },
+      "details": {
+        "components": [
+          "MZI Mesh",
+          "PCM Crossbar",
+          "Photodetector"
+        ],
+        "layers": [
+          "PhotonicLayer",
+          "MemristiveLayer"
+        ],
+        "utilities": [
+          "Optimizer",
+          "Config",
+          "Logger"
+        ]
+      },
+      "error": null
     },
-    "functionality": {
-      "config_validation": "FAILED: No module named 'jax'",
-      "data_io": "FAILED: No module named 'jax'",
-      "memoization": "FAILED: No module named 'jax'"
+    {
+      "name": "Generation 2 Robustness",
+      "passed": true,
+      "execution_time": 0.1828317642211914,
+      "metrics": {
+        "validation_tests": 6,
+        "validation_passed": 6,
+        "validation_rate": 1.0,
+        "numerical_stability": true,
+        "error_handling": true
+      },
+      "details": {
+        "validation_types": [
+          "Input validation",
+          "Shape validation",
+          "Numerical stability",
+          "Security validation"
+        ],
+        "pass_rate": "100.0%"
+      },
+      "error": null
     },
-    "security": {
-      "security_general": "FAILED: No module named 'jax'"
+    {
+      "name": "Generation 3 Performance",
+      "passed": true,
+      "execution_time": 1.3826267719268799,
+      "metrics": {
+        "jit_compile_time_ms": 54.232120513916016,
+        "jit_exec_time_ms": 0.06079673767089844,
+        "jit_speedup": 892.0235294117647,
+        "vectorized_time_ms": 337.19825744628906,
+        "sequential_time_ms": 195.6641674041748,
+        "vectorization_efficiency": 0.5802644678119113,
+        "batch_size": 32,
+        "memory_manager_available": true,
+        "performance_optimizer_available": true
+      },
+      "details": {
+        "performance_score": 4,
+        "total_criteria": 4,
+        "jit_available": true,
+        "vectorization_available": true,
+        "memory_optimization": true
+      },
+      "error": null
     },
-    "dependencies": {
-      "numpy": "MISSING",
-      "jax": "MISSING",
-      "matplotlib": "MISSING",
-      "pandas": "MISSING",
-      "scipy": "MISSING",
-      "pytest": "MISSING (optional)",
-      "coverage": "MISSING (optional)"
+    {
+      "name": "System Integration",
+      "passed": false,
+      "execution_time": 0.3167743682861328,
+      "metrics": {},
+      "details": {
+        "error": "setup_logging() got an unexpected keyword argument 'log_level'"
+      },
+      "error": null
     },
-    "health": {
-      "health_check": "FAILED: No module named 'jax'"
+    {
+      "name": "Code Quality",
+      "passed": true,
+      "execution_time": 0.2340703010559082,
+      "metrics": {
+        "python_files": 79,
+        "documented_functions": 931,
+        "total_functions": 1362,
+        "module_docstrings": 79,
+        "total_modules": 79,
+        "documentation_rate": 0.6835535976505139,
+        "module_documentation_rate": 1.0,
+        "README.md": true,
+        "requirements.txt": true,
+        "setup.py": true,
+        "LICENSE": true
+      },
+      "details": {
+        "quality_score": 6,
+        "total_criteria": 6,
+        "key_files": {
+          "README.md": true,
+          "requirements.txt": true,
+          "setup.py": true,
+          "LICENSE": true
+        }
+      },
+      "error": null
+    },
+    {
+      "name": "Security Compliance",
+      "passed": true,
+      "execution_time": 0.4016540050506592,
+      "metrics": {
+        "security_score": 4,
+        "total_checks": 5,
+        "security_rate": 0.8,
+        "input_validation": true,
+        "parameter_sanitization": true,
+        "error_handling": false,
+        "logging_security": true,
+        "no_hardcoded_secrets": true
+      },
+      "details": {
+        "security_checks": {
+          "input_validation": true,
+          "parameter_sanitization": true,
+          "error_handling": false,
+          "logging_security": true,
+          "no_hardcoded_secrets": true
+        },
+        "compliance_rate": "80.0%"
+      },
+      "error": null
     }
-  }
+  ]
 }
