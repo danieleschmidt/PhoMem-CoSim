@@ -1,0 +1,9 @@
+{
+  "significance_level": 0.05,
+  "pairwise_comparisons": {
+    "sphere": {}
+  },
+  "overall_rankings": {},
+  "effect_sizes": {},
+  "confidence_intervals": {}
+}
