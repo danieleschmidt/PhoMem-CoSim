@@ -1,16 +1,16 @@
 {
-  "timestamp": 1755130471.4926436,
+  "timestamp": 1755269040.8125594,
   "summary": {
-    "passed_gates": 5,
+    "passed_gates": 3,
     "total_gates": 6,
-    "pass_rate": 0.8333333333333334,
-    "total_execution_time": 6.1412599086761475
+    "pass_rate": 0.5,
+    "total_execution_time": 12.167964696884155
   },
   "gates": [
     {
       "name": "Generation 1 Functionality",
       "passed": true,
-      "execution_time": 3.623302698135376,
+      "execution_time": 3.298654794692993,
       "metrics": {
         "components_created": 3,
         "layers_tested": 2,
@@ -39,7 +39,7 @@
     {
       "name": "Generation 2 Robustness",
       "passed": true,
-      "execution_time": 0.1828317642211914,
+      "execution_time": 0.18017983436584473,
       "metrics": {
         "validation_tests": 6,
         "validation_passed": 6,
@@ -61,14 +61,14 @@
     {
       "name": "Generation 3 Performance",
       "passed": true,
-      "execution_time": 1.3826267719268799,
+      "execution_time": 1.3144421577453613,
       "metrics": {
-        "jit_compile_time_ms": 54.232120513916016,
-        "jit_exec_time_ms": 0.06079673767089844,
-        "jit_speedup": 892.0235294117647,
-        "vectorized_time_ms": 337.19825744628906,
-        "sequential_time_ms": 195.6641674041748,
-        "vectorization_efficiency": 0.5802644678119113,
+        "jit_compile_time_ms": 50.74334144592285,
+        "jit_exec_time_ms": 0.064849853515625,
+        "jit_speedup": 782.4742647058823,
+        "vectorized_time_ms": 310.73927879333496,
+        "sequential_time_ms": 181.4405918121338,
+        "vectorization_efficiency": 0.5838997648340604,
         "batch_size": 32,
         "memory_manager_available": true,
         "performance_optimizer_available": true
@@ -85,7 +85,7 @@
     {
       "name": "System Integration",
       "passed": false,
-      "execution_time": 0.3167743682861328,
+      "execution_time": 0.3168463706970215,
       "metrics": {},
       "details": {
         "error": "setup_logging() got an unexpected keyword argument 'log_level'"
@@ -94,23 +94,23 @@
     },
     {
       "name": "Code Quality",
-      "passed": true,
-      "execution_time": 0.2340703010559082,
+      "passed": false,
+      "execution_time": 4.2475972175598145,
       "metrics": {
-        "python_files": 79,
-        "documented_functions": 931,
-        "total_functions": 1362,
-        "module_docstrings": 79,
-        "total_modules": 79,
-        "documentation_rate": 0.6835535976505139,
-        "module_documentation_rate": 1.0,
+        "python_files": 14974,
+        "documented_functions": 83460,
+        "total_functions": 270687,
+        "module_docstrings": 4153,
+        "total_modules": 14973,
+        "documentation_rate": 0.30832659122898404,
+        "module_documentation_rate": 0.27736592533226473,
         "README.md": true,
         "requirements.txt": true,
         "setup.py": true,
         "LICENSE": true
       },
       "details": {
-        "quality_score": 6,
+        "quality_score": 4,
         "total_criteria": 6,
         "key_files": {
           "README.md": true,
@@ -123,17 +123,17 @@
     },
     {
       "name": "Security Compliance",
-      "passed": true,
-      "execution_time": 0.4016540050506592,
+      "passed": false,
+      "execution_time": 2.81024432182312,
       "metrics": {
-        "security_score": 4,
+        "security_score": 3,
         "total_checks": 5,
-        "security_rate": 0.8,
+        "security_rate": 0.6,
         "input_validation": true,
         "parameter_sanitization": true,
         "error_handling": false,
         "logging_security": true,
-        "no_hardcoded_secrets": true
+        "no_hardcoded_secrets": false
       },
       "details": {
         "security_checks": {
@@ -141,9 +141,9 @@
           "parameter_sanitization": true,
           "error_handling": false,
           "logging_security": true,
-          "no_hardcoded_secrets": true
+          "no_hardcoded_secrets": false
         },
-        "compliance_rate": "80.0%"
+        "compliance_rate": "60.0%"
       },
       "error": null
     }
