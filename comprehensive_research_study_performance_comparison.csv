@@ -1,0 +1,9 @@
+Metric,Algorithm Mean,Algorithm Std,Baseline Mean,Baseline Std,Improvement (%),Ratio
+Accuracy,0.8387,0.0462,0.7511,0.0952,11.67%,1.1167
+Speed,0.9214,0.0692,0.6849,0.1276,34.53%,1.3453
+Energy Efficiency,44.6857,8.0417,28.7150,6.0449,55.62%,1.5562
+Area Efficiency,86.0068,10.6168,49.6265,13.6532,73.31%,1.7331
+Physics Compliance,0.9545,0.0324,0.8105,0.0685,17.76%,1.1776
+Quantum Potential,0.7775,0.1284,0.4392,0.1605,77.02%,1.7702
+Research Novelty,0.8232,0.0766,0.3452,0.1034,138.48%,2.3848
+Thermal Stability,0.8945,0.0780,0.6973,0.0888,28.28%,1.2828

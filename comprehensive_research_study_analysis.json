@@ -1,0 +1,83 @@
+{
+  "research_metrics": {
+    "statistical_significance": 1.0,
+    "effect_size": 2.638719716779365,
+    "confidence_interval": [
+      -1.3839149106355442e-08,
+      3.412187397572331e-08
+    ],
+    "p_value": 1.0141362434683932e-08,
+    "power_analysis": 0.9999923198380939,
+    "reproducibility_score": 0.9094514842813506,
+    "novel_contribution_score": 0.48945834762863305,
+    "benchmarking_score": 1.581285135485389
+  },
+  "detailed_comparison": {
+    "accuracy": {
+      "algorithm_mean": 0.8387263047371931,
+      "algorithm_std": 0.04621424689362122,
+      "baseline_mean": 0.7510617152867028,
+      "baseline_std": 0.09516982512225167,
+      "improvement_ratio": 1.1167193999465497,
+      "improvement_percentage": 11.672073139328464
+    },
+    "speed": {
+      "algorithm_mean": 0.9214224696374361,
+      "algorithm_std": 0.06924300629192102,
+      "baseline_mean": 0.6849136047076323,
+      "baseline_std": 0.12757685976922684,
+      "improvement_ratio": 1.3453100040562886,
+      "improvement_percentage": 34.53114640923181
+    },
+    "energy_efficiency": {
+      "algorithm_mean": 44.68569946664462,
+      "algorithm_std": 8.041665324209983,
+      "baseline_mean": 28.714983013605174,
+      "baseline_std": 6.044949950136626,
+      "improvement_ratio": 1.556180544814948,
+      "improvement_percentage": 55.61805796399717
+    },
+    "area_efficiency": {
+      "algorithm_mean": 86.00676088923124,
+      "algorithm_std": 10.61677009419387,
+      "baseline_mean": 49.62647560868268,
+      "baseline_std": 13.65324226673567,
+      "improvement_ratio": 1.7330821522433741,
+      "improvement_percentage": 73.3082172393908
+    },
+    "physics_compliance": {
+      "algorithm_mean": 0.9545290802024204,
+      "algorithm_std": 0.03242893500823772,
+      "baseline_mean": 0.8105418145024775,
+      "baseline_std": 0.06854753611329484,
+      "improvement_ratio": 1.177641776749725,
+      "improvement_percentage": 17.764301049084533
+    },
+    "quantum_potential": {
+      "algorithm_mean": 0.7774587799344252,
+      "algorithm_std": 0.1283789111974005,
+      "baseline_mean": 0.43919470443601283,
+      "baseline_std": 0.16046785383907985,
+      "improvement_ratio": 1.7701875771594542,
+      "improvement_percentage": 77.01898540487541
+    },
+    "research_novelty": {
+      "algorithm_mean": 0.823218136788115,
+      "algorithm_std": 0.07659702241461055,
+      "baseline_mean": 0.345186786485803,
+      "baseline_std": 0.10338230219669067,
+      "improvement_ratio": 2.384841437088252,
+      "improvement_percentage": 138.48443340621284
+    },
+    "thermal_stability": {
+      "algorithm_mean": 0.8945199098810768,
+      "algorithm_std": 0.07796531247904334,
+      "baseline_mean": 0.6972925930603496,
+      "baseline_std": 0.08876666395713191,
+      "improvement_ratio": 1.2828454452809772,
+      "improvement_percentage": 28.284687939712278
+    }
+  },
+  "statistical_tests": {},
+  "visualizations": []
+}
