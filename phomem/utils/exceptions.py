@@ -1,5 +1,5 @@
 """
-Custom exception classes for PhoMem-CoSim with comprehensive error handling.
+Comprehensive exception hierarchy for PhoMem-CoSim with enhanced error handling and recovery.
 """
 
 from typing import Dict, Any, Optional, List, Union
