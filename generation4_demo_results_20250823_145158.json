@@ -1,0 +1,25 @@
+{
+  "best_individual": {
+    "photonic_layers": 4,
+    "memristive_layers": 3,
+    "photonic_size": 1,
+    "memristive_rows": 16,
+    "memristive_cols": 8,
+    "phase_shifter_type": "pcm",
+    "memristor_type": "pcm",
+    "optical_wavelength": 1.58e-06,
+    "operating_temperature": 297.5632618594055
+  },
+  "best_fitness": {
+    "accuracy": 0.7940542210068466,
+    "speed": 0.9872642906506073,
+    "energy_efficiency": 49.67956679417755,
+    "area_efficiency": 98.72642906506073,
+    "physics_compliance": 1.0,
+    "thermal_stability": 0.9976277411576596,
+    "research_novelty": 0.7411764705882353,
+    "quantum_potential": 0.6346774193548387
+  },
+  "total_time": 0.049399375915527344,
+  "generations_completed": 15
+}

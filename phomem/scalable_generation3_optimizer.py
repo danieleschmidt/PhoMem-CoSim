@@ -32,6 +32,15 @@ except ImportError:
     CUPY_AVAILABLE = False
 
 
+class ScalableOptimizer:
+    """Alias for backward compatibility."""
+    def __init__(self, *args, **kwargs):
+        self.optimizer = QuantumScalePerformanceOptimizer(*args, **kwargs)
+    
+    def __getattr__(self, name):
+        return getattr(self.optimizer, name)
+
+
 class QuantumScalePerformanceOptimizer:
     """Quantum-scale performance optimizer for neuromorphic systems."""
     

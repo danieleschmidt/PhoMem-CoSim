@@ -299,10 +299,10 @@ class PerformanceOptimizer:
         try:
             # Simple hash-based key generation
             key_data = pickle.dumps((args, sorted(kwargs.items())))
-            return hashlib.md5(key_data).hexdigest()
+            return hashlib.sha256(key_data).hexdigest()
         except Exception:
             # Fallback to string representation
-            return hashlib.md5(str((args, kwargs)).encode()).hexdigest()
+            return hashlib.sha256(str((args, kwargs)).encode()).hexdigest()
     
     def _get_memory_usage(self) -> int:
         """Get current memory usage in bytes."""
