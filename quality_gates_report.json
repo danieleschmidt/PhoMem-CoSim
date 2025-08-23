@@ -1,151 +1,43 @@
 {
-  "timestamp": 1755269040.8125594,
-  "summary": {
-    "passed_gates": 3,
-    "total_gates": 6,
-    "pass_rate": 0.5,
-    "total_execution_time": 12.167964696884155
-  },
-  "gates": [
-    {
-      "name": "Generation 1 Functionality",
-      "passed": true,
-      "execution_time": 3.298654794692993,
-      "metrics": {
-        "components_created": 3,
-        "layers_tested": 2,
-        "forward_passes": 2,
-        "optical_power_conservation": 0.9586628079414368,
-        "current_amplification": 2.399030923843384
-      },
-      "details": {
-        "components": [
-          "MZI Mesh",
-          "PCM Crossbar",
-          "Photodetector"
-        ],
-        "layers": [
-          "PhotonicLayer",
-          "MemristiveLayer"
-        ],
-        "utilities": [
-          "Optimizer",
-          "Config",
-          "Logger"
-        ]
-      },
-      "error": null
+  "timestamp": 1755960637.2336597,
+  "project_root": "/root/repo",
+  "python_version": "3.12.3 (main, Aug 14 2025, 17:47:21) [GCC 13.3.0]",
+  "overall_pass_rate": 93.75,
+  "total_tests": 16,
+  "successful_tests": 15,
+  "results_by_category": {
+    "imports": {
+      "phomem": "SUCCESS",
+      "config": "SUCCESS",
+      "data_utils": "SUCCESS",
+      "plotting": "SUCCESS",
+      "performance": "SUCCESS",
+      "security": "SUCCESS"
     },
-    {
-      "name": "Generation 2 Robustness",
-      "passed": true,
-      "execution_time": 0.18017983436584473,
-      "metrics": {
-        "validation_tests": 6,
-        "validation_passed": 6,
-        "validation_rate": 1.0,
-        "numerical_stability": true,
-        "error_handling": true
-      },
-      "details": {
-        "validation_types": [
-          "Input validation",
-          "Shape validation",
-          "Numerical stability",
-          "Security validation"
-        ],
-        "pass_rate": "100.0%"
-      },
-      "error": null
+    "functionality": {
+      "config_validation": "SUCCESS",
+      "data_io": "SUCCESS",
+      "memoization": "SUCCESS"
     },
-    {
-      "name": "Generation 3 Performance",
-      "passed": true,
-      "execution_time": 1.3144421577453613,
-      "metrics": {
-        "jit_compile_time_ms": 50.74334144592285,
-        "jit_exec_time_ms": 0.064849853515625,
-        "jit_speedup": 782.4742647058823,
-        "vectorized_time_ms": 310.73927879333496,
-        "sequential_time_ms": 181.4405918121338,
-        "vectorization_efficiency": 0.5838997648340604,
-        "batch_size": 32,
-        "memory_manager_available": true,
-        "performance_optimizer_available": true
-      },
-      "details": {
-        "performance_score": 4,
-        "total_criteria": 4,
-        "jit_available": true,
-        "vectorization_available": true,
-        "memory_optimization": true
-      },
-      "error": null
+    "security": {
+      "path_validation_safe": "SUCCESS",
+      "path_validation_dangerous": "SUCCESS: Correctly rejected dangerous path",
+      "data_redaction": "SUCCESS"
     },
-    {
-      "name": "System Integration",
-      "passed": false,
-      "execution_time": 0.3168463706970215,
-      "metrics": {},
-      "details": {
-        "error": "setup_logging() got an unexpected keyword argument 'log_level'"
-      },
-      "error": null
+    "dependencies": {
+      "numpy": "SUCCESS",
+      "jax": "SUCCESS",
+      "matplotlib": "SUCCESS",
+      "pandas": "SUCCESS",
+      "scipy": "SUCCESS",
+      "pytest": "SUCCESS",
+      "coverage": "SUCCESS"
     },
-    {
-      "name": "Code Quality",
-      "passed": false,
-      "execution_time": 4.2475972175598145,
-      "metrics": {
-        "python_files": 14974,
-        "documented_functions": 83460,
-        "total_functions": 270687,
-        "module_docstrings": 4153,
-        "total_modules": 14973,
-        "documentation_rate": 0.30832659122898404,
-        "module_documentation_rate": 0.27736592533226473,
-        "README.md": true,
-        "requirements.txt": true,
-        "setup.py": true,
-        "LICENSE": true
-      },
-      "details": {
-        "quality_score": 4,
-        "total_criteria": 6,
-        "key_files": {
-          "README.md": true,
-          "requirements.txt": true,
-          "setup.py": true,
-          "LICENSE": true
-        }
-      },
-      "error": null
-    },
-    {
-      "name": "Security Compliance",
-      "passed": false,
-      "execution_time": 2.81024432182312,
-      "metrics": {
-        "security_score": 3,
-        "total_checks": 5,
-        "security_rate": 0.6,
-        "input_validation": true,
-        "parameter_sanitization": true,
-        "error_handling": false,
-        "logging_security": true,
-        "no_hardcoded_secrets": false
-      },
-      "details": {
-        "security_checks": {
-          "input_validation": true,
-          "parameter_sanitization": true,
-          "error_handling": false,
-          "logging_security": true,
-          "no_hardcoded_secrets": false
-        },
-        "compliance_rate": "60.0%"
-      },
-      "error": null
+    "health": {
+      "health_dependencies": "SUCCESS",
+      "health_memory": "SUCCESS",
+      "health_disk_space": "SUCCESS",
+      "health_jax_functionality": "WARNING"
     }
-  ]
+  }
 }
