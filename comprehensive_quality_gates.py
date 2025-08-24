@@ -1,24 +1,22 @@
 #!/usr/bin/env python3
 """
-Comprehensive Quality Gates and Testing Suite
-Validates all three generations and overall system quality
+MANDATORY QUALITY GATES - Comprehensive Testing and Validation
+Implements all required quality gates with 85%+ coverage target.
 """
 
-import jax
-import jax.numpy as jnp
-import numpy as np
 import sys
-import time
+import os
 import subprocess
-import json
+import time
+import numpy as np
 import traceback
-from pathlib import Path
-from typing import Dict, Any, List, Tuple
+import json
+import hashlib
+from typing import Dict, Any, List, Tuple, Optional
+from dataclasses import dataclass
 
-# Add the phomem module to the Python path
-sys.path.insert(0, str(Path(__file__).parent))
-
-import phomem as pm
+print("🛡️ MANDATORY QUALITY GATES - Comprehensive Validation")
+print("=" * 60)
 
 def run_quality_gate(gate_name: str, test_func) -> Dict[str, Any]:
     """Run a quality gate and return results."""

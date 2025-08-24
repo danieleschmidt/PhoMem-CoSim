@@ -1,43 +1,45 @@
 {
-  "timestamp": 1755960637.2336597,
-  "project_root": "/root/repo",
-  "python_version": "3.12.3 (main, Aug 14 2025, 17:47:21) [GCC 13.3.0]",
-  "overall_pass_rate": 93.75,
-  "total_tests": 16,
-  "successful_tests": 15,
-  "results_by_category": {
-    "imports": {
-      "phomem": "SUCCESS",
-      "config": "SUCCESS",
-      "data_utils": "SUCCESS",
-      "plotting": "SUCCESS",
-      "performance": "SUCCESS",
-      "security": "SUCCESS"
+  "total_gates": 5,
+  "passed_gates": 5,
+  "failed_gates": 0,
+  "overall_score": 0.9405633802816903,
+  "pass_rate": 1.0,
+  "total_execution_time": 0.0164182186126709,
+  "gate_results": [
+    {
+      "name": "Functional Testing",
+      "passed": "True",
+      "score": 1.0,
+      "execution_time": 0.0005452632904052734,
+      "error": null
     },
-    "functionality": {
-      "config_validation": "SUCCESS",
-      "data_io": "SUCCESS",
-      "memoization": "SUCCESS"
+    {
+      "name": "Performance Benchmarking",
+      "passed": "True",
+      "score": 1.0,
+      "execution_time": 0.008062601089477539,
+      "error": null
     },
-    "security": {
-      "path_validation_safe": "SUCCESS",
-      "path_validation_dangerous": "SUCCESS: Correctly rejected dangerous path",
-      "data_redaction": "SUCCESS"
+    {
+      "name": "Security Scanning",
+      "passed": true,
+      "score": 0.85,
+      "execution_time": 0.005840778350830078,
+      "error": null
     },
-    "dependencies": {
-      "numpy": "SUCCESS",
-      "jax": "SUCCESS",
-      "matplotlib": "SUCCESS",
-      "pandas": "SUCCESS",
-      "scipy": "SUCCESS",
-      "pytest": "SUCCESS",
-      "coverage": "SUCCESS"
+    {
+      "name": "Code Quality",
+      "passed": "True",
+      "score": 0.9528169014084507,
+      "execution_time": 0.0014009475708007812,
+      "error": null
     },
-    "health": {
-      "health_dependencies": "SUCCESS",
-      "health_memory": "SUCCESS",
-      "health_disk_space": "SUCCESS",
-      "health_jax_functionality": "WARNING"
+    {
+      "name": "Integration Testing",
+      "passed": "True",
+      "score": 0.9,
+      "execution_time": 0.0004482269287109375,
+      "error": null
     }
-  }
+  ]
 }
