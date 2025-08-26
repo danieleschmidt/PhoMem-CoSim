@@ -1,0 +1,50 @@
+{
+  "config": {
+    "wavelength": 1.55e-06,
+    "temperature": 300.0,
+    "num_layers": 2,
+    "learning_rate": 0.001,
+    "max_iterations": 100,
+    "enable_validation": true,
+    "enable_monitoring": true,
+    "enable_aging": true,
+    "checkpoint_interval": 20,
+    "aging_time_hours": 100.0,
+    "temperature_stress": 85.0,
+    "max_retries": 3,
+    "numerical_tolerance": 1e-12
+  },
+  "training_metadata": {
+    "iterations_completed": 100,
+    "best_loss": 1.4766407012939453,
+    "final_loss": 1.591394305229187,
+    "convergence_achieved": false
+  },
+  "training_time": 3.6308786869049072,
+  "test_results": {
+    "Normal": {
+      "mse": 1.911014437675476,
+      "success": true
+    },
+    "Small values": {
+      "mse": 0.0017204098403453827,
+      "success": true
+    },
+    "Large values": {
+      "mse": 2.0264222621917725,
+      "success": true
+    }
+  },
+  "physics_analysis": {
+    "optical_loss": 4.745609760284424,
+    "electrical_power": 2.373550523770973e-05
+  },
+  "performance_summary": {
+    "total_iterations": 0,
+    "total_errors": 0,
+    "avg_memory_mb": 0.0,
+    "computation_times": {
+      "parameter_initialization": 0.9256222248077393
+    }
+  }
+}

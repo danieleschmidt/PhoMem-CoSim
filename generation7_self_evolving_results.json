@@ -1,0 +1,406 @@
+{
+  "start_time": 1756181300.7741416,
+  "duration": 20.0,
+  "evolution_results": {
+    "best_fitness": 1.1042164899039775,
+    "final_architecture": [
+      8,
+      16,
+      16,
+      16,
+      16
+    ],
+    "evolution_history": [
+      {
+        "generation": 0,
+        "best_fitness": 0.9115548356550248,
+        "average_fitness": 0.725027109635693,
+        "diversity": 0.0969559687701289
+      },
+      {
+        "generation": 1,
+        "best_fitness": 0.8930383211508011,
+        "average_fitness": 0.7108251185878506,
+        "diversity": 0.12347031391159309
+      },
+      {
+        "generation": 2,
+        "best_fitness": 0.898473036488752,
+        "average_fitness": 0.6954615438264464,
+        "diversity": 0.11123315527730798
+      },
+      {
+        "generation": 3,
+        "best_fitness": 0.9089915823525744,
+        "average_fitness": 0.6987631634611973,
+        "diversity": 0.09670172781166489
+      },
+      {
+        "generation": 4,
+        "best_fitness": 1.0281304838190934,
+        "average_fitness": 0.7780431261570693,
+        "diversity": 0.12852463064212866
+      },
+      {
+        "generation": 5,
+        "best_fitness": 0.8719885582155806,
+        "average_fitness": 0.7210245564364647,
+        "diversity": 0.10428849875485098
+      },
+      {
+        "generation": 6,
+        "best_fitness": 0.9325166630227928,
+        "average_fitness": 0.7187475010202271,
+        "diversity": 0.1170020756346533
+      },
+      {
+        "generation": 7,
+        "best_fitness": 0.9241639332382419,
+        "average_fitness": 0.77224230481061,
+        "diversity": 0.08288380576867056
+      },
+      {
+        "generation": 8,
+        "best_fitness": 0.8757783407928537,
+        "average_fitness": 0.7389991651852234,
+        "diversity": 0.08014954073578284
+      },
+      {
+        "generation": 9,
+        "best_fitness": 0.9471231255106835,
+        "average_fitness": 0.7546460174601823,
+        "diversity": 0.07938734984499428
+      },
+      {
+        "generation": 10,
+        "best_fitness": 0.8982634202443724,
+        "average_fitness": 0.7694686131990756,
+        "diversity": 0.09162523336605281
+      },
+      {
+        "generation": 11,
+        "best_fitness": 0.8545977055768366,
+        "average_fitness": 0.7378423113558588,
+        "diversity": 0.06419674240052599
+      },
+      {
+        "generation": 12,
+        "best_fitness": 0.9902267065617752,
+        "average_fitness": 0.7711702823620608,
+        "diversity": 0.11818677827758177
+      },
+      {
+        "generation": 13,
+        "best_fitness": 1.0070603753714167,
+        "average_fitness": 0.7673331786576714,
+        "diversity": 0.1387748430822837
+      },
+      {
+        "generation": 14,
+        "best_fitness": 0.8407548288522231,
+        "average_fitness": 0.7249524628978644,
+        "diversity": 0.10254247860529066
+      },
+      {
+        "generation": 15,
+        "best_fitness": 0.8431917051033233,
+        "average_fitness": 0.6979443619324502,
+        "diversity": 0.09568994405418509
+      },
+      {
+        "generation": 16,
+        "best_fitness": 0.9722262239875741,
+        "average_fitness": 0.7435807309525011,
+        "diversity": 0.10367308485611555
+      },
+      {
+        "generation": 17,
+        "best_fitness": 0.9970237532260604,
+        "average_fitness": 0.7459039688777248,
+        "diversity": 0.13273043847014407
+      },
+      {
+        "generation": 18,
+        "best_fitness": 0.941629304110985,
+        "average_fitness": 0.7173311818758759,
+        "diversity": 0.1342238796827541
+      },
+      {
+        "generation": 19,
+        "best_fitness": 0.9154140211220129,
+        "average_fitness": 0.6936389387984022,
+        "diversity": 0.1407556849708486
+      },
+      {
+        "generation": 20,
+        "best_fitness": 0.894843877392485,
+        "average_fitness": 0.7079538434883516,
+        "diversity": 0.13668840137394522
+      },
+      {
+        "generation": 21,
+        "best_fitness": 1.0539998577351326,
+        "average_fitness": 0.7748543647439254,
+        "diversity": 0.14783536594041555
+      },
+      {
+        "generation": 22,
+        "best_fitness": 1.0058646176125832,
+        "average_fitness": 0.7601432049274852,
+        "diversity": 0.12947832437408613
+      },
+      {
+        "generation": 23,
+        "best_fitness": 0.9958156215369646,
+        "average_fitness": 0.7953571045613207,
+        "diversity": 0.11058356813313858
+      },
+      {
+        "generation": 24,
+        "best_fitness": 0.9689907672962805,
+        "average_fitness": 0.7721036537959295,
+        "diversity": 0.11097610790954418
+      },
+      {
+        "generation": 25,
+        "best_fitness": 1.0220634936960349,
+        "average_fitness": 0.7915441872191542,
+        "diversity": 0.11593087731157463
+      },
+      {
+        "generation": 26,
+        "best_fitness": 1.0186818095179175,
+        "average_fitness": 0.7712672753191943,
+        "diversity": 0.11004401008996735
+      },
+      {
+        "generation": 27,
+        "best_fitness": 1.0143140903837156,
+        "average_fitness": 0.7796173023282202,
+        "diversity": 0.12862798027893232
+      },
+      {
+        "generation": 28,
+        "best_fitness": 0.9804841145971513,
+        "average_fitness": 0.8092822545192769,
+        "diversity": 0.10225967427523683
+      },
+      {
+        "generation": 29,
+        "best_fitness": 1.087740656822137,
+        "average_fitness": 0.8140965910803851,
+        "diversity": 0.12235583297430148
+      },
+      {
+        "generation": 30,
+        "best_fitness": 0.9768925048443118,
+        "average_fitness": 0.789208096351291,
+        "diversity": 0.12944689539861676
+      },
+      {
+        "generation": 31,
+        "best_fitness": 1.0259275492143916,
+        "average_fitness": 0.8502745598698317,
+        "diversity": 0.12493974190089716
+      },
+      {
+        "generation": 32,
+        "best_fitness": 1.0317320104474759,
+        "average_fitness": 0.7954816221191551,
+        "diversity": 0.10237927431873027
+      },
+      {
+        "generation": 33,
+        "best_fitness": 0.9911886908209944,
+        "average_fitness": 0.8270076329733463,
+        "diversity": 0.09410361686801795
+      },
+      {
+        "generation": 34,
+        "best_fitness": 0.9694215702718443,
+        "average_fitness": 0.7763115623275538,
+        "diversity": 0.11258997337184788
+      },
+      {
+        "generation": 35,
+        "best_fitness": 0.9381318595716276,
+        "average_fitness": 0.7778525399846175,
+        "diversity": 0.11714544432940795
+      },
+      {
+        "generation": 36,
+        "best_fitness": 1.0160279342588647,
+        "average_fitness": 0.8289098358511117,
+        "diversity": 0.11142179921532588
+      },
+      {
+        "generation": 37,
+        "best_fitness": 1.0562750177794409,
+        "average_fitness": 0.8124951625340812,
+        "diversity": 0.11606805596537706
+      },
+      {
+        "generation": 38,
+        "best_fitness": 0.9779022620580259,
+        "average_fitness": 0.7929189870844666,
+        "diversity": 0.11657085996204887
+      },
+      {
+        "generation": 39,
+        "best_fitness": 1.0578925298551909,
+        "average_fitness": 0.7387537726643967,
+        "diversity": 0.21032209842238372
+      },
+      {
+        "generation": 40,
+        "best_fitness": 1.0314899097755177,
+        "average_fitness": 0.8205339218677962,
+        "diversity": 0.16468227083506165
+      },
+      {
+        "generation": 41,
+        "best_fitness": 0.9805845942542282,
+        "average_fitness": 0.7678482192018052,
+        "diversity": 0.13692686684900882
+      },
+      {
+        "generation": 42,
+        "best_fitness": 1.0463841471841806,
+        "average_fitness": 0.8112810180178475,
+        "diversity": 0.13976558527025032
+      },
+      {
+        "generation": 43,
+        "best_fitness": 0.9337396731020574,
+        "average_fitness": 0.7783220212256063,
+        "diversity": 0.08301979707738877
+      },
+      {
+        "generation": 44,
+        "best_fitness": 0.9321969746099665,
+        "average_fitness": 0.7832644402479423,
+        "diversity": 0.1097600802718856
+      },
+      {
+        "generation": 45,
+        "best_fitness": 1.0320305303917068,
+        "average_fitness": 0.7847790556095636,
+        "diversity": 0.1419992756590635
+      },
+      {
+        "generation": 46,
+        "best_fitness": 1.100800532115073,
+        "average_fitness": 0.7977990203149492,
+        "diversity": 0.13873730680076893
+      },
+      {
+        "generation": 47,
+        "best_fitness": 1.027118623698888,
+        "average_fitness": 0.7531927152140072,
+        "diversity": 0.09982319853606107
+      },
+      {
+        "generation": 48,
+        "best_fitness": 1.1042164899039775,
+        "average_fitness": 0.7938729839175727,
+        "diversity": 0.11912761269090186
+      },
+      {
+        "generation": 49,
+        "best_fitness": 1.0283097115734092,
+        "average_fitness": 0.7826309812777736,
+        "diversity": 0.11889331116999242
+      }
+    ],
+    "generations_completed": 50
+  },
+  "code_generation_results": {
+    "optimization_function": {
+      "best_code": "\ndef autonomous_optimizer(gradients, state):\n    learning_rate = 0.06965931662517227\n    momentum = 0.9660828418628619\n    \n    # Autonomous optimization logic\n    if hasattr(state, 'velocity'):\n        state.velocity = momentum * state.velocity + (1 - momentum) * gradients\n    else:\n        state.velocity = gradients\n    \n    # Adaptive learning rate based on gradient magnitude\n    grad_norm = sum(abs(g) for g in gradients)\n    adaptive_lr = learning_rate / (1 + grad_norm * 0.1)\n    \n    return -adaptive_lr * state.velocity\n",
+      "performance": 0.7857540085653791,
+      "attempts": 5
+    },
+    "data_processing": {
+      "best_code": "\ndef autonomous_data_processor(data, training=True):\n    # Adaptive normalization\n    if 'layer_norm' == 'batch_norm':\n        mean = data.mean()\n        std = data.std() + 1e-8\n        data = (data - mean) / std\n    \n    # Intelligent dropout\n    if training and random.random() < 0.2485083654597573:\n        mask_prob = 1 - 0.2485083654597573\n        data = data * (random.random() > mask_prob) / mask_prob\n    \n    return data\n",
+      "performance": 0.6422893011051204,
+      "attempts": 5
+    },
+    "neural_layer": {
+      "best_code": "\ndef autonomous_neural_layer(inputs, weights, bias):\n    # Forward pass\n    if 'dense' == 'dense':\n        output = inputs @ weights + bias\n    elif 'dense' == 'convolutional':\n        # Simulated convolution\n        output = inputs * weights.mean() + bias\n    \n    # Activation function\n    if 'tanh' == 'relu':\n        output = max(0, output)\n    elif 'tanh' == 'tanh':\n        output = math.tanh(output)\n    elif 'tanh' == 'sigmoid':\n        output = 1 / (1 + math.exp(-output))\n    \n    return output\n",
+      "performance": 0.5066174966734551,
+      "attempts": 5
+    }
+  },
+  "healing_results": {
+    "monitoring_events": 20,
+    "healing_actions": 28,
+    "health_improvements": 18
+  },
+  "learning_results": {
+    "timestamp": 1756181300.7808156,
+    "learning_outcomes": [
+      {
+        "strategy": "performance_feedback",
+        "insights": [
+          "Throughput below optimal levels"
+        ],
+        "recommendations": [
+          "Consider parallel processing"
+        ]
+      },
+      {
+        "strategy": "user_interaction",
+        "insights": [
+          "User satisfaction declining"
+        ],
+        "recommendations": [
+          "Improve user interface responsiveness"
+        ]
+      },
+      {
+        "strategy": "error_analysis",
+        "insights": [
+          "Error rate increasing"
+        ],
+        "recommendations": [
+          "Implement better error handling"
+        ]
+      },
+      {
+        "strategy": "resource_optimization",
+        "insights": [],
+        "recommendations": []
+      }
+    ],
+    "system_improvements": [
+      {
+        "recommendation": "Improve user interface responsiveness",
+        "priority": 0.7406029644489005,
+        "implementation_complexity": "medium",
+        "expected_impact": 0.14824213984442208
+      },
+      {
+        "recommendation": "Consider parallel processing",
+        "priority": 0.6078330022319531,
+        "implementation_complexity": "medium",
+        "expected_impact": 0.6224504370426671
+      },
+      {
+        "recommendation": "Implement better error handling",
+        "priority": 0.6043177207098525,
+        "implementation_complexity": "low",
+        "expected_impact": 0.4528033399127992
+      }
+    ],
+    "knowledge_updates": []
+  },
+  "overall_improvement": 4.149103425351963,
+  "end_time": 1756181320.8359451,
+  "system_metrics": {
+    "uptime": 20.061795234680176,
+    "evolution_cycles": 1,
+    "performance_improvements": 1,
+    "self_healing_events": 28,
+    "learning_insights": 4
+  }
+}
