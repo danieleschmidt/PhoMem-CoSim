@@ -1,7 +1,7 @@
 ================================================================================
 AUTONOMOUS SDLC EXECUTION - COMPREHENSIVE VALIDATION REPORT
 ================================================================================
-Generated: 2025-08-08 20:55:04
+Generated: 2025-08-27 20:26:46
 
 📦 COMPONENT: Generation 1: Research Algorithms
 ------------------------------------------------------------
@@ -82,13 +82,13 @@ Detailed Results:
   ✅ PASS: Directory: phomem - Directory exists
   ✅ PASS: Project file: README.md - File exists
   ✅ PASS: Project file: requirements.txt - File exists
-  ❌ FAIL: Security patterns - Issues found: 6
-  ⚠️ WARN: Security issue - test_comprehensive_suite.py: exec_usage
-  ⚠️ WARN: Security issue - test_generation_2.py: exec_usage
-  ⚠️ WARN: Security issue - test_generation_2_standalone.py: eval_usage
-  ⚠️ WARN: Security issue - test_generation_2_standalone.py: exec_usage
-  ⚠️ WARN: Security issue - security.py: eval_usage
-  ✅ PASS: Performance patterns - Found 47 performance features
+  ❌ FAIL: Security patterns - Issues found: 194
+  ⚠️ WARN: Security issue - comprehensive_performance_benchmark.py: exec_usage
+  ⚠️ WARN: Security issue - production_deployment_complete.py: exec_usage
+  ⚠️ WARN: Security issue - quality_gates_final.py: hardcoded_password
+  ⚠️ WARN: Security issue - quality_gates_final.py: eval_usage
+  ⚠️ WARN: Security issue - test_autonomous_sdlc_v4_pure_python.py: hardcoded_password
+  ✅ PASS: Performance patterns - Found 6117 performance features
 
 ================================================================================
 OVERALL QUALITY GATES ASSESSMENT
